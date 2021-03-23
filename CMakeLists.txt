@@ -19,15 +19,15 @@ include_directories(${ANTLR4_INCLUDE_DIRS})
 
 # set variable pointing to the antlr tool that supports C++
 # this is not required if the jar file can be found under PATH environment
-set(ANTLR_EXECUTABLE /home/nicola/CLionProjects/malbolgepp/antlr-4.9.1-complete.jar)
+set(ANTLR_EXECUTABLE /home/kolya/CLionProjects/malbolgepp/antlr-4.9.1-complete.jar)
 # add macros to generate ANTLR Cpp code from grammar
 find_package(ANTLR REQUIRED)
 
 # Call macro to add lexer and grammar to your build dependencies.
-antlr_target(SampleGrammarLexer /home/nicola/CLionProjects/malbolgepp/TLexer.g4 LEXER
+antlr_target(SampleGrammarLexer /home/kolya/CLionProjects/malbolgepp/TLexer.g4 LEXER
         PACKAGE antlrcpptest
         )
-antlr_target(SampleGrammarParser /home/nicola/CLionProjects/malbolgepp/TParser.g4 PARSER
+antlr_target(SampleGrammarParser /home/kolya/CLionProjects/malbolgepp/TParser.g4 PARSER VISITOR
         PACKAGE antlrcpptest
         )
 

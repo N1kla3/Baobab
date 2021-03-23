@@ -4,21 +4,6 @@ options {
 	tokenVocab = TLexer;
 }
 
-// These are all supported parser sections:
-
-// Parser file header. Appears at the top in all parser related files. Use e.g. for copyrights.
-@parser::header {/* parser/listener/visitor header section */}
-
-// Appears before any #include in h + cpp files.
-@parser::preinclude {/* parser precinclude section */}
-
-// Follows directly after the standard #includes in h + cpp files.
-@parser::postinclude {
-/* parser postinclude section */
-#ifndef _WIN32
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-}
 
 // Directly preceeds the parser class declaration in the h file (e.g. for additional types etc.).
 @parser::context {/* parser context section */}
@@ -68,15 +53,7 @@ void doAfter() {}
 @parser::basevisitordefinitions {/* base visitor definitions section */}
 
 // Actual grammar start.
-main: stat+ EOF;
-divide : ID (and_ GreaterThan)? {doesItBlend()}?;
-and_ @init{ doInit(); } @after { doAfter(); } : And ;
 
-conquer:
-	divide+
-	| {doesItBlend()}? and_ { myAction(); }
-	| ID (LessThan* divide)?? { $ID.text; }
-;
 
 // Unused rule to demonstrate some of the special features.
 unused[double input = 111] returns [double calculated] locals [int _a, double _b, int _c] @init{ doInit(); } @after { doAfter(); } :
@@ -93,6 +70,41 @@ unused2:
 	(unused[1] .)+ (Colon | Semicolon | Plus)? ~Semicolon
 ;
 
+type: Int
+    | Float
+    | StringType
+    | Bool
+    | Set
+    | Char
+    | Double
+;
+
+boolBinaryOperators:
+        LessThan
+      | LessEqualThan
+      | GreaterThan
+      | GreaterEqualThan
+      | Equal
+      | Equality
+      | And
+      | Or
+      | ExOr
+;
+
+function:
+    Function OpenPar ((type Name) (Comma type Name)*)* ClosePar
+    FunctionReturn (type | Void)
+;
+//TODO function body
+
+variable:
+    Variable type Name (Equal (Name | expr))?
+;
+
+branch:
+    If OpenPar
+;
+
 stat: expr Equal expr Semicolon
     | expr Semicolon
 ;
@@ -102,7 +114,6 @@ expr: expr Star expr
     | OpenPar expr ClosePar
     | <assoc = right> expr QuestionMark expr Colon expr
     | <assoc = right> expr Equal expr
-    | identifier = id
     | flowControl
     | INT
     | String
@@ -111,9 +122,8 @@ expr: expr Star expr
 flowControl:
 	Return expr # Return
 	| Continue # Continue
+	| Break # Break
 ;
 
-id: ID;
 array : OpenCurly el += INT (Comma el += INT)* CloseCurly;
-idarray : OpenCurly element += id (Comma element += id)* CloseCurly;
 any: t = .;

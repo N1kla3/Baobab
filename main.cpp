@@ -2,8 +2,8 @@
 #include <iostream>
 
 #include "antlr4-runtime.h"
-#include "generated/TLexer.h"
-#include "generated/TParser.h"
+#include "TLexer.h"
+#include "TParser.h"
 
 using namespace antlrcpptest;
 using namespace antlr4;
@@ -14,14 +14,10 @@ int main(int , const char **) {
   CommonTokenStream tokens(&lexer);
 
   tokens.fill();
-  for (auto token : tokens.getTokens()) {
-    std::cout << token->toString() << std::endl;
-  }
 
   TParser parser(&tokens);
   tree::ParseTree* tree = parser.main();
 
-  std::cout << tree->toStringTree(&parser) << std::endl << std::endl;
 
   return 0;
 }
