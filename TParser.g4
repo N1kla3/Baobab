@@ -66,8 +66,13 @@ finally {
   cleanUp();
 }
 
-unused2:
-	(unused[1] .)+ (Colon | Semicolon | Plus)? ~Semicolon
+main: Start Semicolon statement* EOF;
+
+statement:
+     Name Equal expr Semicolon
+    | function Semicolon
+    | functionCall Semicolon
+    | variable Semicolon
 ;
 
 type: Int
@@ -96,26 +101,53 @@ function:
     FunctionReturn (type | Void)
 ;
 //TODO function body
+functionCall:
+    Name OpenPar ((expr) (Comma expr)*)* ClosePar
+;
 
 variable:
     Variable type Name (Equal (Name | expr))?
 ;
 
-branch:
-    If OpenPar
+condition:
+      condition boolBinaryOperators condition
+    | Not? Name
+    | INT
 ;
+
+body:
+    BodyStart
+
+    BodyEnd
+;
+
+branch:
+    If OpenPar condition ClosePar
+    //TODO if body
+;
+
+
+
+floatValue: INT+ Dot INT+ F;
+setValue: OpenCurly
+              (INT (Comma INT)*)*
+            | (floatValue (Comma floatValue)*)*
+            | (String (Comma String)*)*
+            | (Name (Comma Name)*)*
+;
+
 
 stat: expr Equal expr Semicolon
     | expr Semicolon
 ;
 
 expr: expr Star expr
+    | expr Minus expr
     | expr Plus expr
     | OpenPar expr ClosePar
-    | <assoc = right> expr QuestionMark expr Colon expr
-    | <assoc = right> expr Equal expr
     | flowControl
     | INT
+    | Name
     | String
 ;
 

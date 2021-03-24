@@ -1,23 +1,31 @@
 
 #include <iostream>
 
-#include "antlr4-runtime.h"
 #include "TLexer.h"
 #include "TParser.h"
+#include "TParserBaseVisitor.h"
+#include "antlr4-runtime.h"
 
 using namespace antlrcpptest;
 using namespace antlr4;
 
-int main(int , const char **) {
-  ANTLRInputStream input(u8"🍴 = 🍐 + \"😎\";(((x * π))) * µ + ∰; a + (x * (y ? 0 : 1) + z);");
-  TLexer lexer(&input);
-  CommonTokenStream tokens(&lexer);
+int main(int argc, const char** argv)
+{
+    if (argc != 2) return -1;
 
-  tokens.fill();
+    std::ifstream stream;
+    stream.open(argv[1]);
 
-  TParser parser(&tokens);
-  tree::ParseTree* tree = parser.main();
-
-
-  return 0;
+    if (stream.is_open())
+    {
+        ANTLRInputStream input(stream);
+        TLexer lexer(&input);
+        CommonTokenStream tokens(&lexer);
+        TParser parser(&tokens);
+        TParser::MainContext* tree = parser.main();
+        TParserBaseVisitor visitor;
+        auto scene = visitor.visitMain(tree);
+    }
+    stream.close();
+    return 0;
 }

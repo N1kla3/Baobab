@@ -7,6 +7,8 @@ tokens {
 	DUMMY
 }
 
+Start: 'start';
+
 Return: 'return';
 Continue: 'continue';
 Break: 'break';
@@ -22,8 +24,10 @@ Function: 'func';
 Variable: 'define';
 For: 'for';
 While: 'while';
+F: 'f';
 
 Space: ' ' -> skip;
+Newline: '\n' -> skip;
 LessThan: '<';
 LessEqualThan: '<=';
 GreaterThan:  '>';
@@ -57,8 +61,10 @@ Minus: '-';
 Star: '*';
 OpenPar: '(';
 ClosePar: ')';
-OpenCurly: '{' -> pushMode(Mode1);
-CloseCurly: '}' -> popMode;
+OpenCurly: '{';
+CloseCurly: '}';
+BodyStart: '[';
+BodyEnd: ']';
 QuestionMark: '?';
 Comma: ',';
 Ampersand: '&' -> type(DUMMY);
@@ -66,6 +72,4 @@ Ampersand: '&' -> type(DUMMY);
 
 Comment : '#' ~[\r\n]* '\r'? '\n' -> channel(CommentsChannel);
 
-
-mode Mode1;
 Dot: '.';
