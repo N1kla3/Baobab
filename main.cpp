@@ -12,7 +12,6 @@ using namespace antlr4;
 int main(int argc, const char** argv)
 {
     if (argc != 2) return -1;
-
     std::ifstream stream;
     stream.open(argv[1]);
 

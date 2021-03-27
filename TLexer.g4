@@ -1,7 +1,6 @@
 lexer grammar TLexer;
 
 
-channels { CommentsChannel, DirectiveChannel }
 
 tokens {
 	DUMMY
@@ -13,10 +12,9 @@ Return: 'return';
 Continue: 'continue';
 Break: 'break';
 
-INT: Digit+;
 fragment Digit: [0-9];
 
-fragment LETTER : [a-zA-Z\u0080-\u{10FFFF}];
+fragment LETTER : [a-zA-Z];
 
 If: 'if';
 Else: 'else';
@@ -24,18 +22,16 @@ Function: 'func';
 Variable: 'define';
 For: 'for';
 While: 'while';
-F: 'f';
+fragment F: 'f';
 
-Space: ' ' -> skip;
-Newline: '\n' -> skip;
 LessThan: '<';
-LessEqualThan: '<=';
 GreaterThan:  '>';
+LessEqualThan: '<=';
 GreaterEqualThan: '>=';
 Equal: '=';
 Equality: '==';
-And: 'and';
 Not: 'not';
+And: 'and';
 Or: 'or';
 ExOr: '||';
 FunctionReturn: '>>';
@@ -48,9 +44,11 @@ Double: 'double';
 Char: 'char';
 StringType: 'string';
 Set: 'set';
+Element: 'element';
 Void: 'void';
 
 String: '"' .*? '"';
+INT: Digit+;
 
 Name: LETTER+;
 
@@ -65,11 +63,11 @@ OpenCurly: '{';
 CloseCurly: '}';
 BodyStart: '[';
 BodyEnd: ']';
-QuestionMark: '?';
 Comma: ',';
-Ampersand: '&' -> type(DUMMY);
-
-
-Comment : '#' ~[\r\n]* '\r'? '\n' -> channel(CommentsChannel);
 
 Dot: '.';
+
+Comment : '#' .*? '#';//TODO comments
+Space: ' ' -> skip;
+Newline: '\n' -> skip;
+

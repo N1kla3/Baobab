@@ -4,75 +4,19 @@ options {
 	tokenVocab = TLexer;
 }
 
+main: Start Semicolon (statement | comment)* EOF;
 
-// Directly preceeds the parser class declaration in the h file (e.g. for additional types etc.).
-@parser::context {/* parser context section */}
-
-// Appears in the private part of the parser in the h file.
-// The function bodies could also appear in the definitions section, but I want to maximize
-// Java compatibility, so we can also create a Java parser from this grammar.
-// Still, some tweaking is necessary after the Java file generation (e.g. bool -> boolean).
-@parser::members {
-/* public parser declarations/members section */
-bool myAction() { return true; }
-bool doesItBlend() { return true; }
-void cleanUp() {}
-void doInit() {}
-void doAfter() {}
-}
-
-// Appears in the public part of the parser in the h file.
-@parser::declarations {/* private parser declarations section */}
-
-// Appears in line with the other class member definitions in the cpp file.
-@parser::definitions {/* parser definitions section */}
-
-// Additionally there are similar sections for (base)listener and (base)visitor files.
-@parser::listenerpreinclude {/* listener preinclude section */}
-@parser::listenerpostinclude {/* listener postinclude section */}
-@parser::listenerdeclarations {/* listener public declarations/members section */}
-@parser::listenermembers {/* listener private declarations/members section */}
-@parser::listenerdefinitions {/* listener definitions section */}
-
-@parser::baselistenerpreinclude {/* base listener preinclude section */}
-@parser::baselistenerpostinclude {/* base listener postinclude section */}
-@parser::baselistenerdeclarations {/* base listener public declarations/members section */}
-@parser::baselistenermembers {/* base listener private declarations/members section */}
-@parser::baselistenerdefinitions {/* base listener definitions section */}
-
-@parser::visitorpreinclude {/* visitor preinclude section */}
-@parser::visitorpostinclude {/* visitor postinclude section */}
-@parser::visitordeclarations {/* visitor public declarations/members section */}
-@parser::visitormembers {/* visitor private declarations/members section */}
-@parser::visitordefinitions {/* visitor definitions section */}
-
-@parser::basevisitorpreinclude {/* base visitor preinclude section */}
-@parser::basevisitorpostinclude {/* base visitor postinclude section */}
-@parser::basevisitordeclarations {/* base visitor public declarations/members section */}
-@parser::basevisitormembers {/* base visitor private declarations/members section */}
-@parser::basevisitordefinitions {/* base visitor definitions section */}
-
-// Actual grammar start.
-
-
-// Unused rule to demonstrate some of the special features.
-unused[double input = 111] returns [double calculated] locals [int _a, double _b, int _c] @init{ doInit(); } @after { doAfter(); } :
-	stat
-;
-catch [...] {
-  // Replaces the standard exception handling.
-}
-finally {
-  cleanUp();
-}
-
-main: Start Semicolon statement* EOF;
+comment: Comment;
 
 statement:
-     Name Equal expr Semicolon
-    | function Semicolon
-    | functionCall Semicolon
-    | variable Semicolon
+     (Name Equal expr
+    | function
+    | functionCall
+    | variable
+    | namespaceBody
+    | branch
+    | forCycle
+    | whileCycle) Semicolon
 ;
 
 type: Int
@@ -82,6 +26,13 @@ type: Int
     | Set
     | Char
     | Double
+    | Element
+;
+
+condition:
+      condition boolBinaryOperators condition
+    | Not? Name
+    | INT
 ;
 
 boolBinaryOperators:
@@ -97,8 +48,8 @@ boolBinaryOperators:
 ;
 
 function:
-    Function OpenPar ((type Name) (Comma type Name)*)* ClosePar
-    FunctionReturn (type | Void)
+    Function Name OpenPar ((type Name) (Comma type Name)*)* ClosePar
+    FunctionReturn (type | Void) body
 ;
 //TODO function body
 functionCall:
@@ -109,31 +60,52 @@ variable:
     Variable type Name (Equal (Name | expr))?
 ;
 
-condition:
-      condition boolBinaryOperators condition
-    | Not? Name
-    | INT
+
+
+branch:
+    If OpenPar condition ClosePar
+    body
+;
+
+forCycle:
+    For OpenPar (variable | expr)? Semicolon
+    condition Semicolon
+    Name Equal expr
+    ClosePar
+    cycleBody
+;
+
+whileCycle:
+    While OpenPar condition ClosePar
+    cycleBody
+;
+
+
+namespaceBody:
+    BodyStart
+    (statement)*
+    BodyEnd
 ;
 
 body:
     BodyStart
-
+    (statement | (Return expr | Return) Semicolon)*
     BodyEnd
 ;
 
-branch:
-    If OpenPar condition ClosePar
-    //TODO if body
+cycleBody:
+    BodyStart
+    (statement | (Break | Continue) Semicolon)*
+    BodyEnd
 ;
 
-
-
 floatValue: INT+ Dot INT+ F;
+
 setValue: OpenCurly
               (INT (Comma INT)*)*
             | (floatValue (Comma floatValue)*)*
             | (String (Comma String)*)*
-            | (Name (Comma Name)*)*
+            | (Name (Comma Name)*)* CloseCurly
 ;
 
 
@@ -151,11 +123,11 @@ expr: expr Star expr
     | String
 ;
 
+cast: OpenPar type ClosePar;
+
 flowControl:
 	Return expr # Return
 	| Continue # Continue
 	| Break # Break
 ;
 
-array : OpenCurly el += INT (Comma el += INT)* CloseCurly;
-any: t = .;

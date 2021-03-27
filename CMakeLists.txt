@@ -5,7 +5,7 @@ project(demo)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # compiler must be 11 or 14
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 # required if linking to static library
 add_definitions(-DANTLR4CPP_STATIC)
@@ -41,7 +41,7 @@ message(${ANTLR_SampleGrammarParser_OUTPUT_DIR})
 # add generated grammar to demo binary target
 add_executable(demo main.cpp
         ${ANTLR_SampleGrammarLexer_CXX_OUTPUTS}
-        ${ANTLR_SampleGrammarParser_CXX_OUTPUTS})
+        ${ANTLR_SampleGrammarParser_CXX_OUTPUTS} TLangVisitor.cpp TLangVisitor.h)
 target_link_libraries(demo antlr4_static)
 message(${ANTLR_SampleGrammarLexer_CXX_OUTPUTS})
 message(${ANTLR_SampleGrammarParser_CXX_OUTPUTS})
