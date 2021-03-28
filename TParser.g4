@@ -9,7 +9,7 @@ main: Start Semicolon (statement | comment)* EOF;
 comment: Comment;
 
 statement:
-     (Name Equal expr
+     (Name Equal cast? expr
     | function
     | functionCall
     | variable
@@ -89,13 +89,13 @@ namespaceBody:
 
 body:
     BodyStart
-    (statement | (Return expr | Return) Semicolon)*
+    (statement | (Return expr Semicolon| Return Semicolon))*
     BodyEnd
 ;
 
 cycleBody:
     BodyStart
-    (statement | (Break | Continue) Semicolon)*
+    (statement | (Break Semicolon| Continue Semicolon) )*
     BodyEnd
 ;
 
@@ -109,15 +109,10 @@ setValue: OpenCurly
 ;
 
 
-stat: expr Equal expr Semicolon
-    | expr Semicolon
-;
-
 expr: expr Star expr
     | expr Minus expr
     | expr Plus expr
     | OpenPar expr ClosePar
-    | flowControl
     | INT
     | Name
     | String
@@ -125,9 +120,4 @@ expr: expr Star expr
 
 cast: OpenPar type ClosePar;
 
-flowControl:
-	Return expr # Return
-	| Continue # Continue
-	| Break # Break
-;
 

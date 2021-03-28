@@ -1,6 +1,7 @@
 
 #include <iostream>
 
+#include "TLangVisitor.h"
 #include "TLexer.h"
 #include "TParser.h"
 #include "TParserBaseVisitor.h"
@@ -22,7 +23,7 @@ int main(int argc, const char** argv)
         CommonTokenStream tokens(&lexer);
         TParser parser(&tokens);
         TParser::MainContext* tree = parser.main();
-        TParserBaseVisitor visitor;
+        TLangVisitor visitor;
         auto scene = visitor.visitMain(tree);
     }
     stream.close();
