@@ -46,6 +46,8 @@ StringType: 'string';
 Set: 'set';
 Element: 'element';
 Void: 'void';
+True: 'true';
+False: 'false';
 
 String: '"' .*? '"';
 INT: Digit+;

@@ -11,6 +11,10 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitMain(antlrcpptest::TParser::MainC
     if (stream.is_open())
     {
         stream << "#include \"smth\"";
+        stream << "\n#include <iostream>";
+        stream << "\n#include <variant>";
+        stream << "\n#include <set>";
+        stream << "\n#include <string>";
         stream << "\nint main(){";
         TLangVisitor::visitChildren(ctx);
         stream << "\n}";
@@ -41,14 +45,16 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitFunction(antlrcpptest::TParser::F
     {//TODO remake in another file
         auto names = ctx->Name();
         auto types = ctx->type();
-        stream << (*(types.end()-1))->getText() << " ";
+        visitType(*(types.end()-1));
+        stream << " ";
         stream << names[0]->getText() << "(";
         if (names.size() > 1)
         {
             for (int i = 1; i < names.size(); i++)
             {
                 if (i != 1) stream << ",";
-                stream << types[i-1]->getText() << " " << names[i]->getText();
+                visitType(types[i-1]);
+                stream << " " << names[i]->getText();
             }
         }
         stream << ")";
@@ -71,12 +77,29 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitFunctionCall(antlrcpptest::TParse
         }
         stream << ")";
     }
-    return TParserBaseVisitor::visitFunctionCall(ctx);
+    return nullptr;
 }
 
 antlrcpp::Any antlrcpptest::TLangVisitor::visitVariable(antlrcpptest::TParser::VariableContext* ctx)
 {
-    return TParserBaseVisitor::visitVariable(ctx);
+    visitType(ctx->type());
+    if (stream.is_open())
+    {
+        stream << ctx->Name()[0]->getText();
+        if (ctx->Equal())
+        {
+            stream << " = ";
+            if (ctx->expr())
+            {
+                visitExpr(ctx->expr());
+            }
+            else
+            {
+                stream << ctx->Name()[1]->getText();
+            }
+        }
+    }
+    return nullptr;
 }
 
 antlrcpp::Any antlrcpptest::TLangVisitor::visitNamespaceBody(antlrcpptest::TParser::NamespaceBodyContext* ctx)
@@ -102,4 +125,25 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitWhileCycle(antlrcpptest::TParser:
 antlrcpp::Any antlrcpptest::TLangVisitor::visitBody(antlrcpptest::TParser::BodyContext* ctx)
 {
     return TParserBaseVisitor::visitBody(ctx);
+}
+
+antlrcpp::Any antlrcpptest::TLangVisitor::visitType(antlrcpptest::TParser::TypeContext* ctx)
+{
+    if (ctx->StringType())
+    {
+        stream << " std::string ";
+    }
+    else if (ctx->Element())
+    {
+        stream << " std::variant<char, int, std::string, float, bool> ";
+    }
+    else if (ctx->Set())
+    {
+        stream << " std::set<std::variant<char, int, std::string, float, bool> ";
+    }
+    else
+    {
+        stream << " " << ctx->getText() << " ";
+    }
+    return TParserBaseVisitor::visitType(ctx);
 }

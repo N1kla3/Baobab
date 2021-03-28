@@ -101,6 +101,8 @@ cycleBody:
 
 floatValue: INT+ Dot INT+ F;
 
+boolValue: True | False;
+
 setValue: OpenCurly
               (INT (Comma INT)*)*
             | (floatValue (Comma floatValue)*)*

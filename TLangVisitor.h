@@ -30,6 +30,8 @@ namespace antlrcpptest
 
         virtual antlrcpp::Any visitBody(TParser::BodyContext* ctx) override;
 
+        virtual antlrcpp::Any visitType(TParser::TypeContext* ctx) override;
+
     private:
         const std::string m_FilePath = "Lang.cpp";
         std::ofstream stream;
