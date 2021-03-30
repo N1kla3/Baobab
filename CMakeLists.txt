@@ -41,7 +41,7 @@ message(${ANTLR_SampleGrammarParser_OUTPUT_DIR})
 # add generated grammar to demo binary target
 add_executable(demo main.cpp
         ${ANTLR_SampleGrammarLexer_CXX_OUTPUTS}
-        ${ANTLR_SampleGrammarParser_CXX_OUTPUTS} TLangVisitor.cpp TLangVisitor.h)
+        ${ANTLR_SampleGrammarParser_CXX_OUTPUTS} TLangVisitor.cpp TLangVisitor.h Elements/Baobab.cpp Elements/Baobab.h Elements/Element.cpp Elements/Element.h)
 target_link_libraries(demo antlr4_static)
 message(${ANTLR_SampleGrammarLexer_CXX_OUTPUTS})
 message(${ANTLR_SampleGrammarParser_CXX_OUTPUTS})

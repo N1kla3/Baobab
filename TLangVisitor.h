@@ -4,6 +4,7 @@
 #pragma once
 
 #include "TParserBaseVisitor.h"
+#include "Elements/Baobab.h"
 
 namespace antlrcpptest
 {
@@ -35,6 +36,7 @@ namespace antlrcpptest
     private:
         const std::string m_FilePath = "Lang.cpp";
         std::ofstream stream;
+        Baobab m_Tree;
     };
 }
 
