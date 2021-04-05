@@ -6,7 +6,9 @@
 
 #include "Element.h"
 #include <memory>
+#include <stack>
 #include <string>
+#include <unordered_map>
 
 class Baobab
 {
@@ -15,6 +17,9 @@ public:
     void AddElement(std::unique_ptr<Element>&& element);
 
 private:
-    std::unique_ptr<Element> m_Root;
+    std::shared_ptr<Element> m_Root;
+
+    std::unordered_map<std::string, std::vector<std::string>> functions{};
+    std::stack<std::stack<std::unordered_map<std::string, int>>> variables{};
 };
 
