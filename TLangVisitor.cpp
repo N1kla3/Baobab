@@ -4,22 +4,12 @@
 
 #include <fstream>
 #include "TLangVisitor.h"
+#include "Elements/MainElement.h"
 
 antlrcpp::Any antlrcpptest::TLangVisitor::visitMain(antlrcpptest::TParser::MainContext* ctx)
 {
-    stream.open(m_FilePath);
-    if (stream.is_open())
-    {
-        stream << "#include \"smth\"";
-        stream << "\n#include <iostream>";
-        stream << "\n#include <variant>";
-        stream << "\n#include <set>";
-        stream << "\n#include <string>";
-        stream << "\nint main(){";
-        TLangVisitor::visitChildren(ctx);
-        stream << "\n}";
-    }
-    stream.close();
+    m_Tree.AddElement(std::make_unique<MainElement>());
+    visitChildren(ctx);
     return nullptr;
 }
 antlrcpp::Any antlrcpptest::TLangVisitor::visitStatement(antlrcpptest::TParser::StatementContext* ctx)

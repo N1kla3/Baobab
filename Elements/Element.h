@@ -11,7 +11,7 @@
 class Element
 {
 public:
-    virtual std::string GetText() const = 0;
+    [[nodiscard]] virtual std::string GetText() const = 0;
     void AddElement(std::unique_ptr<Element>&& element);
 protected:
     std::vector<std::unique_ptr<Element>> m_Children{};
