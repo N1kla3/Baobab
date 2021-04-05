@@ -20,6 +20,6 @@ private:
     std::shared_ptr<Element> m_Root;
 
     std::unordered_map<std::string, std::vector<std::string>> functions{};
-    std::stack<std::stack<std::unordered_map<std::string, int>>> variables{};
+    std::stack<std::stack<std::unordered_map<std::string, std::tuple<int, std::string>>>> variables{};
 };
 
