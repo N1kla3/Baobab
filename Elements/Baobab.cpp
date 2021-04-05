@@ -20,3 +20,36 @@ void Baobab::AddElement(std::unique_ptr<Element>&& element)
 {
     m_Root = std::move(element);
 }
+
+void Baobab::AddVisibilityLayer()
+{
+    if (variables.empty()) return;
+    std::stack<Baobab::var_map> new_stack = variables.top();
+    variables.push(new_stack);
+}
+
+std::stack<Baobab::var_map>& Baobab::GetLastStack()
+{
+    return variables.top();
+}
+
+void Baobab::RemoveStack()
+{
+    if (variables.empty()) return;
+    variables.pop();
+}
+
+Baobab::var_map& Baobab::GetFunctionVarMap(const std::string& functionName)
+{
+    if (functions.find(functionName) != functions.end())
+    {
+        return functions.at(functionName);
+    }
+    //TODO default map
+}
+
+void Baobab::AddFunction(const std::string& functionName, const Baobab::var_map& varMap)
+{
+    functions[functionName] = varMap;
+}
+
