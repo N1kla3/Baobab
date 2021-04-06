@@ -24,11 +24,11 @@ void Baobab::AddElement(std::unique_ptr<Element>&& element)
 void Baobab::AddVisibilityLayer()
 {
     if (variables.empty()) return;
-    std::stack<Baobab::var_map> new_stack = variables.top();
+    Baobab::var_map new_stack = variables.top();
     variables.push(new_stack);
 }
 
-std::stack<Baobab::var_map>& Baobab::GetLastStack()
+Baobab::var_map& Baobab::GetLastStack()
 {
     return variables.top();
 }

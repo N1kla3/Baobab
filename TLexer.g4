@@ -33,7 +33,6 @@ Equality: '==';
 Not: 'not';
 And: 'and';
 Or: 'or';
-ExOr: '||';
 FunctionReturn: '>>';
 
 // Types

@@ -14,13 +14,13 @@ class Baobab
 {
 public:
     using var_map = std::unordered_map<std::string, std::tuple<int, std::string>>;
-    using var_stack = std::stack<std::stack<var_map>>;
+    using var_stack = std::stack<var_map>;
 
     void WriteTreeTo(const std::string& filePath);
     void AddElement(std::unique_ptr<Element>&& element);
 
     void AddVisibilityLayer();
-    std::stack<var_map>& GetLastStack();
+    var_map& GetLastStack();
     void RemoveStack();
 
     var_map& GetFunctionVarMap(const std::string& functionName);

@@ -44,7 +44,6 @@ boolBinaryOperators:
       | Equality
       | And
       | Or
-      | ExOr
 ;
 
 function:
