@@ -40,7 +40,6 @@ boolBinaryOperators:
       | LessEqualThan
       | GreaterThan
       | GreaterEqualThan
-      | Equal
       | Equality
       | And
       | Or
@@ -56,7 +55,7 @@ functionCall:
 ;
 
 variable:
-    Variable type Name (Equal (Name | expr))?
+    Variable type Name (Equal (Name | expr | condition))?
 ;
 
 
@@ -114,6 +113,9 @@ expr: expr Star expr
     | expr Minus expr
     | expr Plus expr
     | OpenPar expr ClosePar
+    | floatValue
+    | boolValue
+    | setValue
     | INT
     | Name
     | String
