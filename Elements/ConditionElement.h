@@ -10,7 +10,7 @@ class ConditionElement : public Element
 {
 public:
     ConditionElement(const std::shared_ptr<Baobab>& owner);
-    virtual std::string GetText() const override;
+    virtual std::string GetText()  override;
 
     std::string name_to_check{};
     int num;

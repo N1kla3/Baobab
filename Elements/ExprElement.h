@@ -10,7 +10,7 @@ class ExprElement : public Element
 {
 public:
     ExprElement(const std::shared_ptr<Baobab>& owner);
-    virtual std::string GetText() const override;
+    virtual std::string GetText()  override;
     void SetType(bool type);
     void SetSignIfHave(const std::string& sign);
 

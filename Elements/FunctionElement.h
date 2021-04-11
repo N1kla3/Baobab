@@ -8,7 +8,7 @@
 class FunctionElement : public Element
 {
 public:
-    [[nodiscard]]virtual std::string GetText() const override;
+    [[nodiscard]]virtual std::string GetText()  override;
 
     std::vector<std::string> names{};
 

@@ -6,7 +6,7 @@
 
 void Element::AddElement(std::unique_ptr<Element>&& element)
 {
-    m_Children.push_back(element);
+    m_Children.push_back(std::move(element));
 }
 
 Element::Element(const std::shared_ptr<Baobab>& owner)

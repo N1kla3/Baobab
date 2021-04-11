@@ -10,7 +10,7 @@ class BoolBinaryElement : public Element
 {
 public:
     BoolBinaryElement(const std::shared_ptr<Baobab>& owner);
-    virtual std::string GetText() const override;
+    virtual std::string GetText()  override;
     std::string str;
 };
 

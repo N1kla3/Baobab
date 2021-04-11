@@ -3,4 +3,4 @@
 //
 
 #include "FunctionElement.h"
-std::string FunctionElement::GetText() const { return std::string(); }
+std::string FunctionElement::GetText()  { return std::string(); }

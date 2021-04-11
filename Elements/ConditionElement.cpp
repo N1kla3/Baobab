@@ -4,7 +4,7 @@
 
 #include "ConditionElement.h"
 
-std::string ConditionElement::GetText() const
+std::string ConditionElement::GetText()
 {
     if (name_to_check.empty())
     {

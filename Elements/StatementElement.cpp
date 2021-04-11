@@ -5,7 +5,7 @@
 #include "StatementElement.h"
 
 
-std::string StatementElement::GetText() const
+std::string StatementElement::GetText()
 {
     if (!m_Children.empty())
     {

@@ -8,7 +8,7 @@ TypeElement::TypeElement(const std::shared_ptr<Baobab>& owner, const std::string
     : Element(owner), m_TypeName(typeName)
 {}
 
-std::string TypeElement::GetText() const
+std::string TypeElement::GetText()
 {
     if      (m_TypeName == "string") return "std::string";
     else if (m_TypeName == "element") return "std::variant<int, float, std::string, bool>";

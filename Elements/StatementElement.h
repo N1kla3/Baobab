@@ -9,7 +9,7 @@
 class StatementElement : public Element
 {
 public:
-    [[nodiscard]] virtual std::string GetText() const override;
+    [[nodiscard]] virtual std::string GetText()  override;
 
 };
 

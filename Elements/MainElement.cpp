@@ -4,7 +4,7 @@
 
 #include "MainElement.h"
 
-std::string MainElement::GetText() const
+std::string MainElement::GetText()
 {
     std::string result{};
     result += "\n#include <iostream>";

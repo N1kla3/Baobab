@@ -13,7 +13,7 @@
 class Baobab
 {
 public:
-    using var_map = std::unordered_map<std::string, std::tuple<int, std::string>>;
+    using var_map = std::unordered_map<std::string, std::pair<int, std::string>>;
     using var_stack = std::stack<var_map>;
 
     void WriteTreeTo(const std::string& filePath);

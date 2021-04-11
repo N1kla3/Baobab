@@ -10,7 +10,7 @@ ExprElement::ExprElement(const std::shared_ptr<Baobab>& owner)
 
 }
 
-std::string ExprElement::GetText() const
+std::string ExprElement::GetText()
 {
     if (m_bType)
     {

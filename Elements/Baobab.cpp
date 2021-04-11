@@ -25,6 +25,10 @@ void Baobab::AddVisibilityLayer()
 {
     if (variables.empty()) return;
     Baobab::var_map new_stack = variables.top();
+    for (auto& [name, pair] : new_stack)
+    {
+        pair.first++;
+    }
     variables.push(new_stack);
 }
 

@@ -4,7 +4,7 @@
 
 #include "BoolBinaryElement.h"
 
-std::string BoolBinaryElement::GetText() const
+std::string BoolBinaryElement::GetText()
 {
     if (str == "and")
     {
