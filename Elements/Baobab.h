@@ -22,11 +22,12 @@ public:
     void OpenBody(bool openClose);
     bool OpenFunctionBody(bool openClose);
 
-    bool CanAddThisVariable(const std::string& name);
+    int CanAddThisVariable(const std::string& name);
 
     bool GetIsFunctionBodyNow() const;
 
-    void AddVariable(const std::string& variableName, const std::string& variableType);
+    bool AddVariable(const std::string& variableName, const std::string& variableType);
+    bool CheckVariableForType(const std::string& name, const std::string& type);
     bool AddFunction(const std::string& functionName);
 
 private:

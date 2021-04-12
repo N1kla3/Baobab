@@ -14,18 +14,11 @@ VariableElement::VariableElement(const std::shared_ptr<Baobab>& owner)
 std::string VariableElement::GetText()
 {//TODO add weak ptr checking
     m_Type = m_Children[0]->GetType();
-    auto& stack = m_Owner.lock()->GetLastStack();
-    if (stack.find(m_Name) != stack.end())
+    if (!m_Owner.lock()->AddVariable(m_Name, m_Type))
     {
-         if (stack.at(m_Name).first == 1)
-         {
-             throw std::exception();//TODO lang exceptions
-         }
-         else
-         {
-             stack.at(m_Name).first--;
-         }
+        throw std::exception();
     }
+    std::string res = GetType() + " " + m_Name;
     if (m_bWithEquality)
     {
         if (m_Children.size() == 2)
@@ -37,17 +30,14 @@ std::string VariableElement::GetText()
         }
         else
         {
-            auto map = m_Owner.lock()->GetLastStack();
-            if (map.find(m_SecondName) != map.end())
+            if (m_Owner.lock()->CheckVariableForType(m_SecondName, m_Type))
             {
-                if (GetType() != map.at(m_SecondName).second)
-                {
-                    throw std::exception();
-                }
+                throw std::exception();
             }
+            res += " =" + m_SecondName;
         }
-    }//TODO function stack
-    return "";
+    }
+    return res;
 }
 
 void VariableElement::SetWithEquality(bool haveEquality)

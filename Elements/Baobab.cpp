@@ -55,22 +55,48 @@ bool Baobab::GetIsFunctionBodyNow() const
     return m_bIsHandlingFunction;
 }
 
-bool Baobab::CanAddThisVariable(const std::string& name)
+int Baobab::CanAddThisVariable(const std::string& name)
 {
     auto map = variables.top();
     if (map.find(name) != map.end())
     {
         int num = map.at(name).first;
-        if (num != 1) return true;
-        return false;
+        return num;
     }
     else
     {
+        return 0;
+    }
+}
+
+bool Baobab::AddVariable(const std::string& variableName, const std::string& variableType)
+{
+    auto num = CanAddThisVariable(variableName);
+    if (num)
+    {
+        if (num == 1)
+        {
+            return false;
+        }
+        else
+        {
+            variables.top()[variableName].first--;
+            variables.top()[variableName].second = variableType;
+            return true;
+        }
+    }
+    else
+    {
+        variables.top()[variableName] = {1, variableType};
         return true;
     }
 }
 
-void Baobab::AddVariable(const std::string& variableName, const std::string& variableType)
+bool Baobab::CheckVariableForType(const std::string& name, const std::string& type)
 {
-    variables.top()[variableName] = {1, variableType};
+    if (variables.top().find(name) != variables.top().end())
+    {
+        if (variables.top().at(name).second == type) return true;
+    }
+    return false;
 }
