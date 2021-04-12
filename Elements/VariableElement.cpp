@@ -37,13 +37,17 @@ std::string VariableElement::GetText()
         }
         else
         {
-
+            auto map = m_Owner.lock()->GetLastStack();
+            if (map.find(m_SecondName) != map.end())
+            {
+                if (GetType() != map.at(m_SecondName).second)
+                {
+                    throw std::exception();
+                }
+            }
         }
-    }
-    else
-    {
-
-    }
+    }//TODO function stack
+    return "";
 }
 
 void VariableElement::SetWithEquality(bool haveEquality)
@@ -54,4 +58,9 @@ void VariableElement::SetWithEquality(bool haveEquality)
 void VariableElement::SetName(const std::string& name)
 {
     m_Name = name;
+}
+
+void VariableElement::SetSecondName(const std::string& name)
+{
+    m_SecondName = name;
 }

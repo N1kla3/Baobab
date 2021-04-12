@@ -17,19 +17,22 @@ public:
     using var_stack = std::stack<var_map>;
 
     void WriteTreeTo(const std::string& filePath);
-    void AddElement(std::unique_ptr<Element>&& element);
+    void SetupRoot(std::unique_ptr<Element>&& element);
 
-    void AddVisibilityLayer();
-    var_map& GetLastStack();
-    void RemoveStack();
+    void OpenBody(bool openClose);
+    bool OpenFunctionBody(bool openClose);
 
-    var_map& GetFunctionVarMap(const std::string& functionName);
-    void AddFunction(const std::string& functionName, const var_map& varMap);
+    bool CanAddThisVariable(const std::string& name);
+
+    bool GetIsFunctionBodyNow() const;
+
+    void AddVariable(const std::string& variableName, const std::string& variableType);
+    bool AddFunction(const std::string& functionName);
 
 private:
     std::shared_ptr<Element> m_Root;
 
-    std::unordered_map<std::string, var_map> functions{};
+    std::unordered_map<std::string, bool> functions{};
     var_stack variables{};
 
     bool m_bIsHandlingFunction = false;

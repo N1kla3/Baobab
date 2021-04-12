@@ -13,10 +13,12 @@ public:
     virtual std::string GetText()  override;
     void SetWithEquality(bool haveEquality);
     void SetName(const std::string& name);
+    void SetSecondName(const std::string& name);
 
 private:
     bool m_bWithEquality;
     std::string m_Name;
+    std::string m_SecondName;
 };
 
 //TODO get types if needed

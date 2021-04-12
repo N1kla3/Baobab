@@ -8,7 +8,7 @@
 
 antlrcpp::Any antlrcpptest::TLangVisitor::visitMain(antlrcpptest::TParser::MainContext* ctx)
 {
-    m_Tree.AddElement(std::make_unique<MainElement>());
+    m_Tree.SetupRoot(std::make_unique<MainElement>());
     visitChildren(ctx);
     return nullptr;
 }

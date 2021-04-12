@@ -16,12 +16,22 @@ void Baobab::WriteTreeTo(const std::string& filePath)
     file.close();
 }
 
-void Baobab::AddElement(std::unique_ptr<Element>&& element)
+void Baobab::SetupRoot(std::unique_ptr<Element>&& element)
 {
     m_Root = std::move(element);
 }
 
-void Baobab::AddVisibilityLayer()
+bool Baobab::AddFunction(const std::string& functionName)
+{
+    if (functions.find(functionName) != functions.end())
+    {
+        return false;
+    }
+    functions[functionName] = true;
+    return true;
+}
+
+void Baobab::OpenBody(bool openClose)
 {
     if (variables.empty()) return;
     Baobab::var_map new_stack = variables.top();
@@ -32,28 +42,35 @@ void Baobab::AddVisibilityLayer()
     variables.push(new_stack);
 }
 
-Baobab::var_map& Baobab::GetLastStack()
+bool Baobab::OpenFunctionBody(bool openClose)
 {
-    return variables.top();
+    if (m_bIsHandlingFunction) return false;
+    Baobab::var_map new_stack{};
+    variables.push(new_stack);
+    return true;
 }
 
-void Baobab::RemoveStack()
+bool Baobab::GetIsFunctionBodyNow() const
 {
-    if (variables.empty()) return;
-    variables.pop();
+    return m_bIsHandlingFunction;
 }
 
-Baobab::var_map& Baobab::GetFunctionVarMap(const std::string& functionName)
+bool Baobab::CanAddThisVariable(const std::string& name)
 {
-    if (functions.find(functionName) != functions.end())
+    auto map = variables.top();
+    if (map.find(name) != map.end())
     {
-        return functions.at(functionName);
+        int num = map.at(name).first;
+        if (num != 1) return true;
+        return false;
     }
-    //TODO default map
+    else
+    {
+        return true;
+    }
 }
 
-void Baobab::AddFunction(const std::string& functionName, const Baobab::var_map& varMap)
+void Baobab::AddVariable(const std::string& variableName, const std::string& variableType)
 {
-    functions[functionName] = varMap;
+    variables.top()[variableName] = {1, variableType};
 }
-
