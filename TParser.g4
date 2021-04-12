@@ -49,7 +49,7 @@ function:
     Function Name OpenPar ((type Name) (Comma type Name)*)* ClosePar
     FunctionReturn (type | Void) body
 ;
-//TODO function body
+
 functionCall:
     Name OpenPar ((expr) (Comma expr)*)* ClosePar
 ;
@@ -102,10 +102,8 @@ floatValue: INT+ Dot INT+ F;
 boolValue: True | False;
 
 setValue: OpenCurly
-              (INT (Comma INT)*)*
-            | (floatValue (Comma floatValue)*)*
-            | (String (Comma String)*)*
-            | (Name (Comma Name)*)* CloseCurly
+            ((INT | floatValue | String | Name) (Comma (INT | floatValue | String | Name))*)
+           CloseCurly
 ;
 
 
@@ -116,6 +114,7 @@ expr: expr Star expr
     | floatValue
     | boolValue
     | setValue
+    | functionCall
     | INT
     | Name
     | String

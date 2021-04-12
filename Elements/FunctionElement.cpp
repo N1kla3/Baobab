@@ -3,4 +3,48 @@
 //
 
 #include "FunctionElement.h"
-std::string FunctionElement::GetText()  { return std::string(); }
+#include "Baobab.h"
+
+std::string FunctionElement::GetText()
+{
+    if (m_Owner.lock()->GetIsFunctionBodyNow())
+    {
+        throw std::exception();
+    }
+    if (!m_Owner.lock()->AddFunction(m_Names[0]))
+    {
+        throw std::exception();
+    }
+    //TODO separate write to h and cpp
+    std::string res = "";
+    m_Owner.lock()->OpenFunctionBody(true);
+    auto param_size = m_Names.size()-1;
+    auto children_size = m_Children.size();
+    auto return_size = children_size - param_size - 1;
+    std::string return_type;
+    if (return_size) return_type += m_Children[children_size-2]->GetText();
+    else return_type += "void";
+    res += return_type;
+    m_Type = return_type;
+    res += " " + m_Names[0] + "(";
+    for (int i = 0; i < param_size; i++)
+    {
+        if (i != 0) res += ",";
+        auto name = m_Names[1 + i];
+        auto type = m_Children[i]->GetText();
+        if (m_Owner.lock()->AddVariable(name, type))
+        {
+             res += type + " " + name;
+        }
+        else throw std::exception();
+    }
+    res += ")";
+    res += m_Children[children_size-1]->GetText();
+    m_Owner.lock()->OpenBody(false);
+    return res;
+}
+
+void FunctionElement::SetNames(const std::vector<std::string>& names)
+{
+    m_Names = names;
+}

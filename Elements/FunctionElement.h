@@ -8,10 +8,12 @@
 class FunctionElement : public Element
 {
 public:
+    FunctionElement(const std::shared_ptr<Baobab>& owner): Element(owner){}
     [[nodiscard]]virtual std::string GetText()  override;
+    void SetNames(const std::vector<std::string>& names);
 
-    std::vector<std::string> names{};
-
-    
+private:
+    std::vector<std::string> m_Names{};
+    std::string m_Type;
 };
 
