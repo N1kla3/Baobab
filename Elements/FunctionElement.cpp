@@ -11,7 +11,7 @@ std::string FunctionElement::GetText()
     {
         throw std::exception();
     }
-    if (!m_Owner.lock()->AddFunction(m_Names[0]))
+    if (!m_Owner.lock()->AddFunction(m_Names[0], <#initializer #>))
     {
         throw std::exception();
     }

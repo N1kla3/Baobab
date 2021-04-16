@@ -56,7 +56,7 @@ target_link_libraries(demo antlr4_static)
 
 ## Documentation for FindANTLR
 
-The module defines the following variables:
+The module defines the following m_Variables:
 
 ```
 ANTLR_FOUND - true is ANTLR jar executable is found
@@ -79,7 +79,7 @@ ANTLR_TARGET(<name> <input>
              [VISITOR])
 ```
 
-which creates a custom command to generate C++ files from `<input>`. Running the macro defines the following variables:
+which creates a custom command to generate C++ files from `<input>`. Running the macro defines the following m_Variables:
 
 ```
 ANTLR_${name}_INPUT - the ANTLR input used for the macro
@@ -113,7 +113,7 @@ Note that this command will do nothing unless the outputs of `Sample`, i.e. `ANT
 
 ## Documentation for ExternalAntlr4Cpp
 
-Including ExternalAntlr4Cpp will add `antlr4_static` and `antlr4_shared` as an optional target. It will also define the following variables:
+Including ExternalAntlr4Cpp will add `antlr4_static` and `antlr4_shared` as an optional target. It will also define the following m_Variables:
 
 ```
 ANTLR4_INCLUDE_DIRS - the include directory that should be included when compiling C++ source file

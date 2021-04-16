@@ -29,7 +29,7 @@ The `ANTLR4_JAR_LOCATION` CMake variable must be set to the location where the `
 Additional options to the ANTLR4 generator can be passed in the `ANTLR4_GENERATED_OPTIONS` variable. Add the installation prefix of `antlr4-runtime` to `CMAKE_PREFIX_PATH` or set
  `antlr4-runtime_DIR` to a directory containing the files.
 
-The following CMake variables are available following a call to `antlr4_generate`
+The following CMake m_Variables are available following a call to `antlr4_generate`
 
 Output variable  | Meaning
 ---|---
@@ -69,7 +69,7 @@ Target|Use
 antlr4_shared|Shared library version of the runtime
 antlr4_static|Static library version of the runtime
 
-Both set the following CMake variables:
+Both set the following CMake m_Variables:
 
 Output variable  | Meaning
 ---|---

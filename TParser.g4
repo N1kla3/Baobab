@@ -51,7 +51,7 @@ function:
 ;
 
 functionCall:
-    Name OpenPar ((expr) (Comma expr)*)* ClosePar
+    Name OpenPar ((expr | Name) (Comma expr | Name)*)* ClosePar
 ;
 
 variable:

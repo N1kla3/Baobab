@@ -21,32 +21,32 @@ void Baobab::SetupRoot(std::unique_ptr<Element>&& element)
     m_Root = std::move(element);
 }
 
-bool Baobab::AddFunction(const std::string& functionName)
+bool Baobab::AddFunction(const std::string& functionName, const std::string& functionType)
 {
-    if (functions.find(functionName) != functions.end())
+    if (m_Functions.find(functionName) != m_Functions.end())
     {
         return false;
     }
-    functions[functionName] = true;
+    m_Functions[functionName] = functionType;
     return true;
 }
 
 void Baobab::OpenBody(bool openClose)
 {
-    if (variables.empty()) return;
-    Baobab::var_map new_stack = variables.top();
+    if (m_Variables.empty()) return;
+    Baobab::var_map new_stack = m_Variables.top();
     for (auto& [name, pair] : new_stack)
     {
         pair.first++;
     }
-    variables.push(new_stack);
+    m_Variables.push(new_stack);
 }
 
 bool Baobab::OpenFunctionBody(bool openClose)
 {
     if (m_bIsHandlingFunction) return false;
     Baobab::var_map new_stack{};
-    variables.push(new_stack);
+    m_Variables.push(new_stack);
     return true;
 }
 
@@ -57,7 +57,7 @@ bool Baobab::GetIsFunctionBodyNow() const
 
 int Baobab::CanAddThisVariable(const std::string& name)
 {
-    auto map = variables.top();
+    auto map = m_Variables.top();
     if (map.find(name) != map.end())
     {
         int num = map.at(name).first;
@@ -80,23 +80,36 @@ bool Baobab::AddVariable(const std::string& variableName, const std::string& var
         }
         else
         {
-            variables.top()[variableName].first--;
-            variables.top()[variableName].second = variableType;
+            m_Variables.top()[variableName].first--;
+            m_Variables.top()[variableName].second = variableType;
             return true;
         }
     }
     else
     {
-        variables.top()[variableName] = {1, variableType};
+        m_Variables.top()[variableName] = {1, variableType};
         return true;
     }
 }
 
 bool Baobab::CheckVariableForType(const std::string& name, const std::string& type)
 {
-    if (variables.top().find(name) != variables.top().end())
+    if (m_Variables.top().find(name) != m_Variables.top().end())
     {
-        if (variables.top().at(name).second == type) return true;
+        if (m_Variables.top().at(name).second == type) return true;
     }
     return false;
+}
+void Baobab::SetIsFunctionBodyNow(bool flag)
+{
+    m_bIsHandlingFunction = flag;
+}
+
+std::string Baobab::GetFunction(const std::string& functionName) const
+{
+    if (m_Functions.find(functionName) != m_Functions.end())
+    {
+        return m_Functions.at(functionName);
+    }
+    return "";
 }

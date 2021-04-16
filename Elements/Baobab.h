@@ -25,16 +25,22 @@ public:
     int CanAddThisVariable(const std::string& name);
 
     bool GetIsFunctionBodyNow() const;
+    void SetIsFunctionBodyNow(bool flag);
 
     bool AddVariable(const std::string& variableName, const std::string& variableType);
     bool CheckVariableForType(const std::string& name, const std::string& type);
-    bool AddFunction(const std::string& functionName);
+    bool AddFunction(const std::string& functionName, const std::string& functionType);
+    /**
+     *
+     * @return return empty string if not found
+     */
+    std::string GetFunction(const std::string& functionName) const;
 
 private:
     std::shared_ptr<Element> m_Root;
 
-    std::unordered_map<std::string, bool> functions{};
-    var_stack variables{};
+    std::unordered_map<std::string, std::string> m_Functions{};
+    var_stack m_Variables{};
 
     bool m_bIsHandlingFunction = false;
 };
