@@ -67,7 +67,7 @@ branch:
 ;
 
 forCycle:
-    For OpenPar (variable | expr)? Semicolon
+    For OpenPar (variable)? Semicolon
     condition Semicolon
     Name Equal expr
     ClosePar
