@@ -9,7 +9,7 @@ main: Start Semicolon (statement | comment)* EOF;
 comment: Comment;
 
 statement:
-     (Name Equal cast? expr
+     (Name Equal cast? (expr | functionCall | Name)
     | function
     | functionCall
     | variable
@@ -63,6 +63,7 @@ variable:
 branch:
     If OpenPar condition ClosePar
     body
+    (Else branch)?
 ;
 
 forCycle:
