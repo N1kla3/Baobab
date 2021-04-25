@@ -29,12 +29,14 @@ public:
 
     bool AddVariable(const std::string& variableName, const std::string& variableType);
     bool CheckVariableForType(const std::string& name, const std::string& type);
-    bool AddFunction(const std::string& functionName, const std::string& functionType);
+    std::string GetVariableType(const std::string& name);
+    bool AddFunction(const std::string& functionName, const std::string& functionType, const std::vector<std::string>& functionParams);
     /**
      *
      * @return return empty string if not found
      */
-    std::string GetFunction(const std::string& functionName) const;
+    std::pair<std::string, std::vector<std::string>>& GetFunction(const std::string& functionName);
+    std::pair<std::string, std::vector<std::string>> empty_function{};
 
 private:
     std::shared_ptr<Element> m_Root;

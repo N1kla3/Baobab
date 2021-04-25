@@ -9,7 +9,7 @@ main: Start Semicolon (statement | comment)* EOF;
 comment: Comment;
 
 statement:
-     (Name Equal (expr | functionCall | Name)
+     (Name Equal expr
     | function
     | functionCall
     | variable
@@ -24,7 +24,6 @@ type: Int
     | StringType
     | Bool
     | Set
-    | Char
     | Element
 ;
 
@@ -50,7 +49,11 @@ function:
 ;
 
 functionCall:
-    Name OpenPar ((expr | Name) (Comma expr | Name)*)* ClosePar
+    Name OpenPar (param (Comma param)*)* ClosePar
+;
+
+param:
+    expr | Name
 ;
 
 variable:

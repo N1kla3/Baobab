@@ -13,6 +13,7 @@ public:
     virtual std::string GetText()  override;
 
     std::string name_to_check{};
-    int num;
+    std::string num;
+    std::string negative;
 };
 

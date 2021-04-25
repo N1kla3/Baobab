@@ -12,9 +12,9 @@ VariableElement::VariableElement(const std::shared_ptr<Baobab>& owner)
 }
 
 std::string VariableElement::GetText()
-{//TODO add weak ptr checking
-    m_Type = m_Children[0]->GetType();
-    if (!m_Owner.lock()->AddVariable(m_Name, m_Type))
+{
+    auto type = m_Children[0]->GetType();
+    if (!m_Owner.lock()->AddVariable(m_Name, type))
     {
         throw std::exception();
     }
@@ -23,14 +23,14 @@ std::string VariableElement::GetText()
     {
         if (m_Children.size() == 2)
         {
-             if (m_Type != m_Children[1]->GetType())
+             if (type != m_Children[1]->GetType())
              {
                  throw std::exception();
              }
         }
         else
         {
-            if (m_Owner.lock()->CheckVariableForType(m_SecondName, m_Type))
+            if (m_Owner.lock()->CheckVariableForType(m_SecondName, type))
             {
                 throw std::exception();
             }

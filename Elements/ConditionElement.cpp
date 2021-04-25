@@ -3,9 +3,11 @@
 //
 
 #include "ConditionElement.h"
+#include "Baobab.h"
 
 std::string ConditionElement::GetText()
 {
+    if (!num.empty()) return num;
     if (name_to_check.empty())
     {
         std::string res = "";
@@ -17,10 +19,22 @@ std::string ConditionElement::GetText()
     }
     else
     {
-        //TODO check name
+        if (m_Owner.lock()->CheckVariableForType(name_to_check, "bool"))
+        {
+            std::string res = "";
+            if (!negative.empty())
+            {
+                res += "!";
+            }
+            res += name_to_check;
+            return res;
+        }
+        throw std::exception();
     }
 }
 
 ConditionElement::ConditionElement(const std::shared_ptr<Baobab>& owner)
     : Element(owner)
-{}
+{
+    m_Type = "bool";
+}

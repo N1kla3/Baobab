@@ -39,7 +39,6 @@ FunctionReturn: '>>';
 Bool: 'bool';
 Int: 'int';
 Float: 'float';
-Char: 'char';
 StringType: 'string';
 Set: 'set';
 Element: 'element';
@@ -48,7 +47,7 @@ True: 'true';
 False: 'false';
 
 String: '"' .*? '"';
-INT: Digit+;
+INT: '-'? Digit+;
 
 Name: LETTER+;
 
