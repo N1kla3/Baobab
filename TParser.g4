@@ -102,8 +102,12 @@ floatValue: INT+ Dot INT+ Floater;
 boolValue: True | False;
 
 setValue: OpenCurly
-            ((INT | floatValue | String | Name) (Comma (INT | floatValue | String | Name))*)
+            (element (Comma element)*)
            CloseCurly
+;
+
+element:
+    (INT | floatValue | String | boolValue | Name)
 ;
 
 

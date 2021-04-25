@@ -14,7 +14,6 @@ public:
     void SetName(const std::string& name);
 
 private:
-    std::string m_Type;
     std::string m_Name = "";
 
     inline static const std::unordered_map<std::string, std::vector<std::string>> CAST_MAP

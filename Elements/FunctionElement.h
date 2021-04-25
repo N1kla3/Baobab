@@ -14,6 +14,5 @@ public:
 
 private:
     std::vector<std::string> m_Names{};
-    std::string m_Type;
 };
 

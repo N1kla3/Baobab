@@ -14,6 +14,5 @@ public:
 
 private:
     std::string m_TypeName;
-    std::string m_Type;
 };
 

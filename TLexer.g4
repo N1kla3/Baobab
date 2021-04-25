@@ -39,7 +39,6 @@ FunctionReturn: '>>';
 Bool: 'bool';
 Int: 'int';
 Float: 'float';
-Double: 'double';
 Char: 'char';
 StringType: 'string';
 Set: 'set';
@@ -68,7 +67,7 @@ Comma: ',';
 
 Dot: '.';
 
-Comment : '#' .*? '#';//TODO comments
+Comment : '#' .*? '#';
 Space: ' ' -> skip;
 Newline: '\n' -> skip;
 

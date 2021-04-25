@@ -14,7 +14,6 @@ public:
     void SetNames(const std::vector<std::string>& names);
 
 private:
-    std::string m_Type;
     std::string m_FunctionName;
     std::vector<std::string> m_Names;
 };
