@@ -9,7 +9,7 @@ main: Start Semicolon (statement | comment)* EOF;
 comment: Comment;
 
 statement:
-     (Name Equal cast? (expr | functionCall | Name)
+     (Name Equal (expr | functionCall | Name)
     | function
     | functionCall
     | variable
@@ -25,7 +25,6 @@ type: Int
     | Bool
     | Set
     | Char
-    | Double
     | Element
 ;
 
@@ -94,11 +93,11 @@ body:
 
 cycleBody:
     BodyStart
-    (statement | (Break Semicolon| Continue Semicolon) )*
+    (statement | (Return expr Semicolon | Return Semicolon | Break Semicolon| Continue Semicolon) )*
     BodyEnd
 ;
 
-floatValue: INT+ Dot INT+ F;
+floatValue: INT+ Dot INT+ Floater;
 
 boolValue: True | False;
 
@@ -112,6 +111,7 @@ expr: expr Star expr
     | expr Minus expr
     | expr Plus expr
     | OpenPar expr ClosePar
+    | cast
     | floatValue
     | boolValue
     | setValue
@@ -121,6 +121,6 @@ expr: expr Star expr
     | String
 ;
 
-cast: OpenPar type ClosePar;
+cast: OpenPar type ClosePar OpenPar (expr | Name | functionCall) ClosePar;
 
 

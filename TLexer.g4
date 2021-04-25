@@ -22,7 +22,7 @@ Function: 'func';
 Variable: 'define';
 For: 'for';
 While: 'while';
-fragment F: 'f';
+Floater: 'f';
 
 LessThan: '<';
 GreaterThan:  '>';
