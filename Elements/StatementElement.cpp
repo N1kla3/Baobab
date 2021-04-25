@@ -3,13 +3,20 @@
 //
 
 #include "StatementElement.h"
+#include "Baobab.h"
 
 
 std::string StatementElement::GetText()
 {
     if (!m_Name.empty())
     {
-        auto res = m_Name + "=" + m_Children[0]->GetText() + ";";
+        if (m_Owner.lock()->CanAddThisVariable(m_Name))
+        {
+            auto res = m_Name + "=" + m_Children[0]->GetText() + ";";
+            if (m_Owner.lock()->GetVariableType(m_Name)
+                != m_Children[0]->GetType()) throw std::exception();
+        }
+        else throw std::exception();
     }
     else if (!m_Children.empty())
     {

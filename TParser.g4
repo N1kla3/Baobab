@@ -57,7 +57,7 @@ param:
 ;
 
 variable:
-    Variable type Name (Equal (Name | expr | condition))?
+    Variable type Name (Equal expr)?
 ;
 
 
@@ -100,7 +100,7 @@ cycleBody:
     BodyEnd
 ;
 
-floatValue: INT+ Dot INT+ Floater;
+floatValue: Floater;
 
 boolValue: True | False;
 
@@ -128,6 +128,6 @@ expr: expr Star expr
     | String
 ;
 
-cast: OpenPar type ClosePar OpenPar (expr | Name | functionCall) ClosePar;
+cast: OpenPar type ClosePar OpenPar expr ClosePar;
 
 

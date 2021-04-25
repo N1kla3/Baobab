@@ -10,24 +10,24 @@ std::string ConditionElement::GetText()
     if (!num.empty()) return num;
     if (name_to_check.empty())
     {
-        std::string res = "";
+        std::string res = "(";
         for (auto& child : m_Children)
         {
-            res += child->GetText();
+            res += " " + child->GetText() + " ";
         }
-        return res;
+        return res + ")";
     }
     else
     {
         if (m_Owner.lock()->CheckVariableForType(name_to_check, "bool"))
         {
-            std::string res = "";
+            std::string res = "(";
             if (!negative.empty())
             {
                 res += "!";
             }
             res += name_to_check;
-            return res;
+            return res + ")";
         }
         throw std::exception();
     }

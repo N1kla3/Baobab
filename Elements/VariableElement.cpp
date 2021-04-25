@@ -21,20 +21,10 @@ std::string VariableElement::GetText()
     std::string res = GetType() + " " + m_Name;
     if (m_bWithEquality)
     {
-        if (m_Children.size() == 2)
+        res += " = " + m_Children[1]->GetText();
+        if (type != m_Children[1]->GetType())
         {
-             if (type != m_Children[1]->GetType())
-             {
-                 throw std::exception();
-             }
-        }
-        else
-        {
-            if (m_Owner.lock()->CheckVariableForType(m_SecondName, type))
-            {
-                throw std::exception();
-            }
-            res += " =" + m_SecondName;
+            throw std::exception();
         }
     }
     return res;
@@ -50,7 +40,3 @@ void VariableElement::SetName(const std::string& name)
     m_Name = name;
 }
 
-void VariableElement::SetSecondName(const std::string& name)
-{
-    m_SecondName = name;
-}

@@ -32,30 +32,10 @@ std::string ExprElement::GetText()
     else if (!m_Sign.empty())
     {
         std::string res{};
-        if (m_Sign == "*")
-        {
-            res += m_Children[0]->GetText() + "*" + m_Children[1]->GetText();
-            if (m_Children[0]->GetType() != m_Children[1]->GetType())
-                throw std::exception();
-            m_Type = m_Children[0]->GetType();
-            return res;
-        }
-        else if (m_Sign == "+")
-        {
-            res += m_Children[0]->GetText() + "+" + m_Children[1]->GetText();
-            if (m_Children[0]->GetType() != m_Children[1]->GetType())
-                throw std::exception();
-            m_Type = m_Children[0]->GetType();
-            return res;
-        }
-        else if (m_Sign == "-")
-        {
-            res += m_Children[0]->GetText() + "-" + m_Children[1]->GetText();
-            if (m_Children[0]->GetType() != m_Children[1]->GetType())
-                throw std::exception();
-            m_Type = m_Children[0]->GetType();
-            return res;
-        }
+        if (m_Sign != "-" ||
+            m_Sign != "+" ||
+            m_Sign != "*") throw std::exception();
+        res += HandleWithSign(m_Sign);
         return res;
     }
     else

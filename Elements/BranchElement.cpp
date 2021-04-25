@@ -16,6 +16,7 @@ std::string BranchElement::GetText()
     m_Owner.lock()->OpenBody(false);
     if (m_Children.size() == 3)
     {
+        result += " else ";
         result += m_Children[2]->GetText();
     }
     return result;

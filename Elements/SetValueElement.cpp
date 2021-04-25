@@ -14,6 +14,6 @@ std::string SetValueElement::GetText()
         else comma = true;
         res += el->GetText();
     }
-    res += ",";
+    res += "}";
     return res;
 }

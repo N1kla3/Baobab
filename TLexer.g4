@@ -22,7 +22,7 @@ Function: 'func';
 Variable: 'define';
 For: 'for';
 While: 'while';
-Floater: 'f';
+Floater: Digit Dot Digit 'f';
 
 LessThan: '<';
 GreaterThan:  '>';

@@ -18,11 +18,24 @@ std::string ForElement::GetText()
     result += ";";
     result += m_Children[i++]->GetText();
     result += ";";
-    result += m_Children[i++]->GetText();
+    result += m_Name + " = ";
+    result += m_Children[i]->GetText();
+    if (m_Owner.lock()->CanAddThisVariable(m_Name))
+    {
+        if (m_Owner.lock()->GetVariableType(m_Name)
+            != m_Children[i++]->GetType())
+            throw std::exception();
+    }
+    else throw std::exception();
     result += ")";
 
     result += m_Children[i++]->GetText();
 
     m_Owner.lock()->OpenBody(false);
     return result;
+}
+
+void ForElement::SetName(const std::string& name)
+{
+    m_Name = name;
 }

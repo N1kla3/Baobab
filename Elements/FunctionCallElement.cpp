@@ -42,7 +42,3 @@ void FunctionCallElement::SetFunctionName(const std::string& name)
 {
     m_FunctionName = name;
 }
-void FunctionCallElement::SetNames(const std::vector<std::string>& names)
-{
-    m_Names = names;
-}

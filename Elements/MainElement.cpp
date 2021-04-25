@@ -16,6 +16,6 @@ std::string MainElement::GetText()
     {
         result += element_ptr->GetText();
     }
-    result += "\n}";
+    result += " return 0;\n}";
     return result;
 }

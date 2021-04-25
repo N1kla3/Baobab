@@ -15,3 +15,8 @@ std::string WhileElement::GetText()
     m_Owner.lock()->OpenBody(false);
     return result;
 }
+//TODO (!!!) namespaceBody, body, cycleBody,
+//TODO (!!!) exceptions messages
+//TODO (!!!) visitor
+//TODO (!!!) file writing
+//TODO (!!!) documentation
