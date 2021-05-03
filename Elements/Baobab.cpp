@@ -30,6 +30,7 @@ bool Baobab::AddFunction(const std::string& functionName, const std::string& fun
     }
     m_Functions[functionName].first = functionType;
     m_Functions[functionName].second = functionParams;
+    m_CurrentFunction = functionName;
     return true;
 }
 
@@ -141,4 +142,13 @@ std::string Baobab::GetVariableType(const std::string& name)
         return type;
     }
     return "None";
+}
+
+std::string Baobab::GetLastFunctionType() const
+{
+    if (m_Functions.find(m_CurrentFunction) != m_Functions.end())
+    {
+        return m_Functions.at(m_CurrentFunction).first;
+    }
+    return empty_function.first;
 }

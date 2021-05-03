@@ -19,4 +19,5 @@ std::string WhileElement::GetText()
 //TODO (!!!) exceptions messages
 //TODO (!!!) visitor
 //TODO (!!!) file writing
+//TODO (!!!) print at other functions
 //TODO (!!!) documentation

@@ -31,6 +31,8 @@ public:
     bool CheckVariableForType(const std::string& name, const std::string& type);
     std::string GetVariableType(const std::string& name);
     bool AddFunction(const std::string& functionName, const std::string& functionType, const std::vector<std::string>& functionParams);
+
+    std::string GetLastFunctionType() const;
     /**
      *
      * @return return empty string if not found
@@ -44,6 +46,7 @@ private:
     std::unordered_map<std::string, std::pair<std::string, std::vector<std::string>>> m_Functions{};
     var_stack m_Variables{};
 
+    std::string m_CurrentFunction;
     bool m_bIsHandlingFunction = false;
 };
 

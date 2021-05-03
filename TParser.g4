@@ -90,14 +90,22 @@ namespaceBody:
 
 body:
     BodyStart
-    (statement | (Return expr Semicolon| Return Semicolon))*
+    (statement | return)*
     BodyEnd
 ;
 
 cycleBody:
     BodyStart
-    (statement | (Return expr Semicolon | Return Semicolon | Break Semicolon| Continue Semicolon) )*
+    (statement | return | stop)*
     BodyEnd
+;
+
+return:
+    (Return expr Semicolon| Return Semicolon)
+;
+
+stop:
+    Break Semicolon| Continue Semicolon
 ;
 
 floatValue: Floater;
