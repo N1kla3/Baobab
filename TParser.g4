@@ -90,17 +90,17 @@ namespaceBody:
 
 body:
     BodyStart
-    (statement | return)*
+    (statement | returnState)*
     BodyEnd
 ;
 
 cycleBody:
     BodyStart
-    (statement | return | stop)*
+    (statement | returnState | stop)*
     BodyEnd
 ;
 
-return:
+returnState:
     (Return expr Semicolon| Return Semicolon)
 ;
 
