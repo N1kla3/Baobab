@@ -7,11 +7,19 @@
 
 std::string StopElement::GetText()
 {
-    if (m_Owner.lock()->GetIsFunctionBodyNow())
+    try
     {
-        return m_Word + ";";
+        if (m_Owner.lock()->GetIsFunctionBodyNow())
+        {
+            return m_Word + ";";
+        }
+        throw "TODO";//TODO REFORGE IN CYCLE
     }
-    throw std::exception();
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }
 
 void StopElement::SetWord(const std::string& word)

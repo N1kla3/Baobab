@@ -13,36 +13,44 @@ ExprElement::ExprElement(const std::shared_ptr<Baobab>& owner)
 
 std::string ExprElement::GetText()
 {
-    if (!m_Value.empty())
+    try
     {
-        m_Type = "std::string";
-        return m_Value;
+        if (!m_Value.empty())
+        {
+            m_Type = "std::string";
+            return m_Value;
+        }
+        else if (!m_Name.empty())
+        {
+            if (!m_Owner.lock()->CanAddThisVariable(m_Name)) throw std::exception();
+            m_Type = m_Owner.lock()->GetVariableType(m_Name);
+            return m_Name;
+        }
+        else if (!m_Int.empty())
+        {
+            m_Type = "int";
+            return m_Int;
+        }
+        else if (!m_Sign.empty())
+        {
+            std::string res{};
+            if (m_Sign != "-" ||
+                m_Sign != "+" ||
+                m_Sign != "*") throw "Incorrect sign";
+            res += HandleWithSign(m_Sign);
+            return res;
+        }
+        else
+        {
+            auto res = m_Children[0]->GetText();
+            m_Type = m_Children[0]->GetType();
+            return res;
+        }
     }
-    else if (!m_Name.empty())
+    catch (const char* message)
     {
-        if (!m_Owner.lock()->CanAddThisVariable(m_Name)) throw std::exception();
-        m_Type = m_Owner.lock()->GetVariableType(m_Name);
-        return m_Name;
-    }
-    else if (!m_Int.empty())
-    {
-        m_Type = "int";
-        return m_Int;
-    }
-    else if (!m_Sign.empty())
-    {
-        std::string res{};
-        if (m_Sign != "-" ||
-            m_Sign != "+" ||
-            m_Sign != "*") throw std::exception();
-        res += HandleWithSign(m_Sign);
-        return res;
-    }
-    else
-    {
-        auto res = m_Children[0]->GetText();
-        m_Type = m_Children[0]->GetType();
-        return res;
+        std::cout << message;
+        std::terminate();
     }
 }
 

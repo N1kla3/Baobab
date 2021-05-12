@@ -6,11 +6,19 @@
 
 std::string CycleBody::GetText()
 {
-    std::string res = "{";
-    for (auto& child : m_Children)
+    try
     {
-        res += child->GetText();
+        std::string res = "{";
+        for (auto& child : m_Children)
+        {
+            res += child->GetText();
+        }
+        res += "}";
+        return res;
     }
-    res += "}";
-    return res;
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }

@@ -7,22 +7,32 @@
 
 std::string CastElement::GetText()
 {
-    m_Type = m_Children[0]->GetType();
-    auto second_type = m_Children[1]->GetType();
-    if (CAST_MAP.find(m_Type) != CAST_MAP.end())
+    try
     {
-        for (auto type : CAST_MAP.at(m_Type))
+        m_Children[0]->GetText();
+        m_Children[1]->GetText();
+        m_Type = m_Children[0]->GetType();
+        auto second_type = m_Children[1]->GetType();
+        if (CAST_MAP.find(m_Type) != CAST_MAP.end())
         {
-            if (type == second_type)
+            for (auto type : CAST_MAP.at(m_Type))
             {
-                std::string res = "(";
-                res += m_Type;
-                res += ")(";
-                res += second_type + ")";
-                return res;
+                if (type == second_type)
+                {
+                    std::string res = "(";
+                    res += m_Type;
+                    res += ")(";
+                    res += second_type + ")";
+                    return res;
+                }
             }
+            throw "Impossible cast from";
         }
-        throw std::exception();
+        throw "Impossible cast to";
     }
-    throw std::exception();
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }

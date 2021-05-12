@@ -77,7 +77,7 @@ bool Baobab::GetIsFunctionBodyNow() const
 
 int Baobab::CanAddThisVariable(const std::string& name)
 {
-    auto map = m_Variables.top();
+    auto& map = m_Variables.top();
     if (map.find(name) != map.end())
     {
         int num = map.at(name).first;

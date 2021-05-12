@@ -3,19 +3,30 @@
 //
 
 #include "MainElement.h"
+#include "Baobab.h"
 
 std::string MainElement::GetText()
 {
-    std::string result{};
-    result += "\n#include <iostream>";
-    result += "\n#include <variant>";
-    result += "\n#include <set>";
-    result += "\n#include <string>";
-    result += "int main(){\n";
-    for (auto& element_ptr : m_Children)
+    try
     {
-        result += element_ptr->GetText();
+        std::string result{};
+        result += "\n#include <iostream>";
+        result += "\n#include <variant>";
+        result += "\n#include <set>";
+        result += "\n#include <string>";
+        result += "int main(){\n";
+        m_Owner.lock()->OpenBody(true);
+        for (auto& element_ptr : m_Children)
+        {
+            result += element_ptr->GetText();
+        }
+        m_Owner.lock()->OpenBody(false);
+        result += " return 0;\n}";
+        return result;
     }
-    result += " return 0;\n}";
-    return result;
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }

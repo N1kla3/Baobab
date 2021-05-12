@@ -7,13 +7,21 @@
 
 std::string WhileElement::GetText()
 {
-    std::string result = "while(";
-    result += m_Children[0]->GetText();
-    result += ")";
-    m_Owner.lock()->OpenBody(true);
-    result += m_Children[1]->GetText();
-    m_Owner.lock()->OpenBody(false);
-    return result;
+    try
+    {
+        std::string result = "while(";
+        result += m_Children[0]->GetText();
+        result += ")";
+        m_Owner.lock()->OpenBody(true);
+        result += m_Children[1]->GetText();
+        m_Owner.lock()->OpenBody(false);
+        return result;
+    }
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }
 //TODO (!!!) exceptions messages
 //TODO (!!!) visitor

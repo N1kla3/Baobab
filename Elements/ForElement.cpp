@@ -7,32 +7,40 @@
 
 std::string ForElement::GetText()
 {
-    std::string result = "for(";
-    m_Owner.lock()->OpenBody(true);
-    auto i = 0;
-    if (m_Children.size() == 4)
+    try
     {
+        std::string result = "for(";
+        m_Owner.lock()->OpenBody(true);
+        auto i = 0;
+        if (m_Children.size() == 4)
+        {
+            result += m_Children[i]->GetText();
+            i++;
+        }
+        result += ";";
+        result += m_Children[i++]->GetText();
+        result += ";";
+        result += m_Name + " = ";
         result += m_Children[i]->GetText();
-        i++;
+        if (m_Owner.lock()->CanAddThisVariable(m_Name))
+        {
+            if (m_Owner.lock()->GetVariableType(m_Name)
+                != m_Children[i++]->GetType())
+                throw "Iteration variable not appropriate have type";
+        }
+        else throw "Variable already exists";
+        result += ")";
+
+        result += m_Children[i++]->GetText();
+
+        m_Owner.lock()->OpenBody(false);
+        return result;
     }
-    result += ";";
-    result += m_Children[i++]->GetText();
-    result += ";";
-    result += m_Name + " = ";
-    result += m_Children[i]->GetText();
-    if (m_Owner.lock()->CanAddThisVariable(m_Name))
+    catch (const char* message)
     {
-        if (m_Owner.lock()->GetVariableType(m_Name)
-            != m_Children[i++]->GetType())
-            throw std::exception();
+        std::cout << message;
+        std::terminate();
     }
-    else throw std::exception();
-    result += ")";
-
-    result += m_Children[i++]->GetText();
-
-    m_Owner.lock()->OpenBody(false);
-    return result;
 }
 
 void ForElement::SetName(const std::string& name)

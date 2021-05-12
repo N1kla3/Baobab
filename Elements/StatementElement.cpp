@@ -8,23 +8,31 @@
 
 std::string StatementElement::GetText()
 {
-    if (!m_Name.empty())
+    try
     {
-        if (m_Owner.lock()->CanAddThisVariable(m_Name))
+        if (!m_Name.empty())
         {
-            auto res = m_Name + "=" + m_Children[0]->GetText() + ";";
-            if (m_Owner.lock()->GetVariableType(m_Name)
-                != m_Children[0]->GetType()) throw std::exception();
+            if (m_Owner.lock()->CanAddThisVariable(m_Name))
+            {
+                auto res = m_Name + "=" + m_Children[0]->GetText() + ";";
+                if (m_Owner.lock()->GetVariableType(m_Name)
+                    != m_Children[0]->GetType()) throw "Defined variable not the same type with value";
+            }
+            else throw "Duplicate variable name";
         }
-        else throw std::exception();
+        else if (!m_Children.empty())
+        {
+            auto res = m_Children[0]->GetText() + ';';
+            m_Type = m_Children[0]->GetType();
+            return res;
+        }
+        return "";
     }
-    else if (!m_Children.empty())
+    catch (const char* message)
     {
-        auto res = m_Children[0]->GetText() + ';';
-        m_Type = m_Children[0]->GetType();
-        return res;
+        std::cout << message;
+        std::terminate();
     }
-    return "";
 }
 
 void StatementElement::SetName(const std::string& name)

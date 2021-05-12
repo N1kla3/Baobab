@@ -28,9 +28,12 @@ type: Int
 ;
 
 condition:
-      condition boolBinaryOperators condition
-    | Not? Name
+    condition boolBinaryOperators condition
+    | (Not?
+    ( Name
     | INT
+    | floatValue
+    | boolValue))
 ;
 
 boolBinaryOperators:

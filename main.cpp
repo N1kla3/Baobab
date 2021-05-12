@@ -15,17 +15,21 @@ int main(int argc, const char** argv)
     if (argc != 2) return -1;
     std::ifstream stream;
     stream.open(argv[1]);
-
-    if (stream.is_open())
+    std::string in = "", temp;
+    while (!stream.eof())
     {
-        ANTLRInputStream input(stream);
-        TLexer lexer(&input);
-        CommonTokenStream tokens(&lexer);
-        TParser parser(&tokens);
-        TParser::MainContext* tree = parser.main();
-        TLangVisitor visitor;
-        auto scene = visitor.visitMain(tree);
+        std::getline(stream, temp);
+        in += temp;
     }
     stream.close();
+    ANTLRInputStream input(in);
+    TLexer lexer(&input);
+    CommonTokenStream tokens(&lexer);
+    tokens.fill();
+    TParser parser(&tokens);
+    TParser::MainContext* tree = parser.main();
+    TLangVisitor visitor;
+    visitor.SetTree();
+    visitor.visitMain(tree);
     return 0;
 }

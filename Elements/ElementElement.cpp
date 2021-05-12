@@ -7,26 +7,34 @@
 
 std::string ElementElement::GetText()
 {
-    m_Type = "std::variant<int, float, std::string, bool>";
-    if (!m_Value.empty())
+    try
     {
-        return m_Value;
-    }
-    else if (!m_Name.empty())
-    {
-        std::array<std::string, 4> types{"int", "float", "std::string", "bool"};
-        for (auto val : types)
+        m_Type = "std::variant<int, float, std::string, bool>";
+        if (!m_Value.empty())
         {
-            if (m_Owner.lock()->CheckVariableForType(m_Name, val))
-            {
-                return m_Name;
-            }
+            return m_Value;
         }
-        throw std::exception();
+        else if (!m_Name.empty())
+        {
+            std::array<std::string, 4> types{"int", "float", "std::string", "bool"};
+            for (auto val : types)
+            {
+                if (m_Owner.lock()->CheckVariableForType(m_Name, val))
+                {
+                    return m_Name;
+                }
+            }
+            throw "Not available type for element of set";
+        }
+        else
+        {
+            return m_Children[0]->GetText();
+        }
     }
-    else
+    catch (const char* message)
     {
-        return m_Children[0]->GetText();
+        std::cout << message;
+        std::terminate();
     }
 }
 

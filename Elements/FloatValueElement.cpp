@@ -6,11 +6,10 @@
 
 std::string FloatValueElement::GetText()
 {
-    return m_First + "." + m_Second + "f";
+    return m_First;
 }
 
-void FloatValueElement::SetNums(const std::string& first, const std::string& second)
+void FloatValueElement::SetNums(const std::string& first)
 {
     m_First = first;
-    m_Second = second;
 }

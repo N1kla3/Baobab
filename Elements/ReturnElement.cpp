@@ -7,30 +7,38 @@
 
 std::string ReturnElement::GetText()
 {
-    if (m_Owner.lock()->GetIsFunctionBodyNow())
+    try
     {
-        if (m_Children.size() == 1)
+        if (m_Owner.lock()->GetIsFunctionBodyNow())
         {
-            auto res = m_Children[0]->GetText();
-            auto type = m_Children[0]->GetType();
-            auto function_type = m_Owner.lock()->GetLastFunctionType();
-            if (type != function_type)
+            if (m_Children.size() == 1)
             {
-                throw std::exception();
+                auto res = m_Children[0]->GetText();
+                auto type = m_Children[0]->GetType();
+                auto function_type = m_Owner.lock()->GetLastFunctionType();
+                if (type != function_type)
+                {
+                    throw "Return type are incompatible with function";
+                }
+                return "return " + res + ";";
             }
-            return "return " + res + ";";
+            else
+            {
+                if (m_Owner.lock()->GetLastFunctionType() == "void")
+                {
+                    return "return;";
+                }
+            }
         }
         else
         {
-            if (m_Owner.lock()->GetLastFunctionType() == "void")
-            {
-                return "return;";
-            }
+            return "return 0;";
         }
+        throw "TOTAL SHIT";
     }
-    else
+    catch (const char* message)
     {
-        return "return 0;";
+        std::cout << message;
+        std::terminate();
     }
-    throw std::exception();
 }

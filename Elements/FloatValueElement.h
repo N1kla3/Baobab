@@ -10,10 +10,9 @@ class FloatValueElement : public Element
 public:
     FloatValueElement(const std::shared_ptr<Baobab>& owner) : Element(owner){m_Type = "float";}
     virtual std::string GetText() override;
-    void SetNums(const std::string& first, const std::string& second);
+    void SetNums(const std::string& first);
 
 private:
     std::string m_First;
-    std::string m_Second;
 };
 

@@ -49,6 +49,10 @@ namespace antlrcpptest
         virtual antlrcpp::Any visitExpr(TParser::ExprContext* ctx) override;
         virtual antlrcpp::Any visitCast(TParser::CastContext* ctx) override;
 
+        inline void SetTree()
+        {
+            m_Tree = std::make_shared<Baobab>();
+        }
     private:
         const std::string m_FilePath = "Lang.cpp";
         std::ofstream stream;

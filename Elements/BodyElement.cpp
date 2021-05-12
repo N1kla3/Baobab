@@ -10,7 +10,15 @@ std::string BodyElement::GetText()
     res += "{";
     for (auto& child : m_Children)
     {
-        res += child->GetText();
+        try
+        {
+            res += child->GetText();
+        }
+        catch (const char* message)
+        {
+            std::cout << message;
+            std::terminate();
+        }
     }
     res += "}";
     return res;

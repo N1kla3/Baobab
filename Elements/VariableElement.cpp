@@ -13,21 +13,30 @@ VariableElement::VariableElement(const std::shared_ptr<Baobab>& owner)
 
 std::string VariableElement::GetText()
 {
-    auto type = m_Children[0]->GetType();
-    if (!m_Owner.lock()->AddVariable(m_Name, type))
+    try
     {
-        throw std::exception();
-    }
-    std::string res = GetType() + " " + m_Name;
-    if (m_bWithEquality)
-    {
-        res += " = " + m_Children[1]->GetText();
-        if (type != m_Children[1]->GetType())
+        auto text = m_Children[0]->GetText();
+        m_Type = m_Children[0]->GetType();
+        if (!m_Owner.lock()->AddVariable(m_Name, m_Type))
         {
-            throw std::exception();
+            throw "Variable already defined";
         }
+        std::string res = GetType() + " " + m_Name;
+        if (m_bWithEquality)
+        {
+            res += " = " + m_Children[1]->GetText();
+            if (m_Type != m_Children[1]->GetType())
+            {
+                throw "Defined type not match values type";
+            }
+        }
+        return res;
     }
-    return res;
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }
 
 void VariableElement::SetWithEquality(bool haveEquality)

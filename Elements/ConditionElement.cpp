@@ -9,7 +9,7 @@ std::string ConditionElement::GetText()
 {
     if (!num.empty()) return num;
     if (name_to_check.empty())
-    {
+    {//TODO REFORGE IT
         std::string res = "(";
         for (auto& child : m_Children)
         {

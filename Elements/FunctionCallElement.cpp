@@ -7,35 +7,43 @@
 
 std::string FunctionCallElement::GetText()
 {
-    std::string res = "";
-    auto functionTraits = m_Owner.lock()->GetFunction(m_FunctionName);
-    if (functionTraits == m_Owner.lock()->empty_function)
+    try
     {
-        throw std::exception();
-    }
-    else
-    {
-        m_Type = functionTraits.first;
-        res += m_FunctionName + "(";
-        bool comma = false;
-        for (auto& node : m_Children)
+        std::string res = "";
+        auto functionTraits = m_Owner.lock()->GetFunction(m_FunctionName);
+        if (functionTraits == m_Owner.lock()->empty_function)
         {
-            if (comma) res += ",";
-            else comma = true;
-            res += node->GetText();
+            throw "Function traits are incorrect";
         }
-        res += ")";
-
-        if (functionTraits.second.size() != m_Children.size()) throw std::exception();
-        for (int index = 0; index < m_Children.size(); index++)
+        else
         {
-            if (m_Children[index]->GetType() != functionTraits.second[index])
+            m_Type = functionTraits.first;
+            res += m_FunctionName + "(";
+            bool comma = false;
+            for (auto& node : m_Children)
             {
-                throw std::exception();
+                if (comma) res += ",";
+                else comma = true;
+                res += node->GetText();
+            }
+            res += ")";
+
+            if (functionTraits.second.size() != m_Children.size()) throw "Incorrect arguments size";
+            for (int index = 0; index < m_Children.size(); index++)
+            {
+                if (m_Children[index]->GetType() != functionTraits.second[index])
+                {
+                    throw "Incorrect argument type";
+                }
             }
         }
+        return res;
     }
-    return res;
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }
 
 void FunctionCallElement::SetFunctionName(const std::string& name)

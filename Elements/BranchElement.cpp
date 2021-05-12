@@ -7,17 +7,25 @@
 
 std::string BranchElement::GetText()
 {
-    std::string result = "";
-    result += "if (";
-    result += m_Children[0]->GetText();
-    result += ")";
-    m_Owner.lock()->OpenBody(true);
-    result += m_Children[1]->GetText();
-    m_Owner.lock()->OpenBody(false);
-    if (m_Children.size() == 3)
+    try
     {
-        result += " else ";
-        result += m_Children[2]->GetText();
+        std::string result = "";
+        result += "if (";
+        result += m_Children[0]->GetText();
+        result += ")";
+        m_Owner.lock()->OpenBody(true);
+        result += m_Children[1]->GetText();
+        m_Owner.lock()->OpenBody(false);
+        if (m_Children.size() == 3)
+        {
+            result += " else ";
+            result += m_Children[2]->GetText();
+        }
+        return result;
     }
-    return result;
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }

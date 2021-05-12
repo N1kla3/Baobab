@@ -6,13 +6,22 @@
 #include "Elements/MainElement.h"
 #include <Elements/BodyElement.h>
 #include <Elements/BoolBinaryElement.h>
+#include <Elements/BoolValueElement.h>
 #include <Elements/BranchElement.h>
+#include <Elements/CastElement.h>
 #include <Elements/ConditionElement.h>
+#include <Elements/ElementElement.h>
+#include <Elements/ExprElement.h>
+#include <Elements/FloatValueElement.h>
 #include <Elements/ForElement.h>
 #include <Elements/FunctionCallElement.h>
 #include <Elements/FunctionElement.h>
 #include <Elements/NamespaceBody.h>
+#include <Elements/ParamElement.h>
+#include <Elements/ReturnElement.h>
+#include <Elements/SetValueElement.h>
 #include <Elements/StatementElement.h>
+#include <Elements/StopElement.h>
 #include <Elements/TypeElement.h>
 #include <Elements/VariableElement.h>
 #include <Elements/WhileElement.h>
@@ -31,16 +40,20 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitMain(antlrcpptest::TParser::MainC
         }
         catch (std::exception e)
         {
+            std::cout << "CATCH";
+            return nullptr;
             //TODO handling
         }
     }
     std::string text = el.GetText();
-    //TODO file write
+    std::ofstream stream_res("res.txt");
+    stream_res << text;
+    stream_res.close();
     return nullptr;
 }
 antlrcpp::Any antlrcpptest::TLangVisitor::visitStatement(antlrcpptest::TParser::StatementContext* ctx)
 {
-    if (ctx->Name()->toString().empty())
+    if (ctx->Name())
     {
         auto el = new StatementElement(m_Tree);
         el->SetName(ctx->Name()->toString());
@@ -48,7 +61,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitStatement(antlrcpptest::TParser::
         el->AddElement(std::move(m_Current));
         m_Current = std::unique_ptr<Element>(el);
     }
-    else if (!ctx->function()->isEmpty())
+    else
     {
         auto el = new StatementElement(m_Tree);
         visitChildren(ctx);
@@ -97,7 +110,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitVariable(antlrcpptest::TParser::V
     el->SetName(ctx->Name()->toString());
     visitType(ctx->type());
     el->AddElement(std::move(m_Current));
-    if (!ctx->Equal()->toString().empty())
+    if (ctx->Equal())
     {
         el->SetWithEquality(true);
         visitExpr(ctx->expr());
@@ -126,7 +139,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitBranch(antlrcpptest::TParser::Bra
     el->AddElement(std::move(m_Current));
     visitBody(ctx->body());
     el->AddElement(std::move(m_Current));
-    if (!ctx->branch()->isEmpty())
+    if (ctx->branch())
     {
         visitBranch(ctx->branch());
         el->AddElement(std::move(m_Current));
@@ -139,7 +152,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitForCycle(antlrcpptest::TParser::F
 {
     auto el = new ForElement(m_Tree);
     el->SetName(ctx->Name()->toString());
-    if (!ctx->variable()->isEmpty())
+    if (ctx->variable())
     {
         visitVariable(ctx->variable());
         el->AddElement(std::move(m_Current));
@@ -186,11 +199,11 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitType(antlrcpptest::TParser::TypeC
 antlrcpp::Any antlrcpptest::TLangVisitor::visitCondition(antlrcpptest::TParser::ConditionContext* ctx)
 {
     auto el = new ConditionElement(m_Tree);
-    el->name_to_check = ctx->Name()->toString();
-    el->negative = ctx->Not()->toString();
-    el->num = ctx->INT()->toString();
-    if (ctx->Name()->toString().empty()
-          && ctx->INT()->toString().empty())
+    if (ctx->Name())el->name_to_check = ctx->Name()->toString();
+    if (ctx->Not())el->negative = ctx->Not()->toString();
+    if (ctx->INT())el->num = ctx->INT()->toString();
+    if (ctx->Name()
+          && ctx->INT())
     {
         visitCondition(ctx->condition(0));
         el->AddElement(std::move(m_Current));
@@ -211,32 +224,189 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitBoolBinaryOperators(antlrcpptest:
 }
 antlrcpp::Any antlrcpptest::TLangVisitor::visitParam(antlrcpptest::TParser::ParamContext* ctx)
 {
-    return TParserBaseVisitor::visitParam(ctx);
+    auto el = new ParamElement(m_Tree);
+    if (!ctx->Name())
+    {
+        visitExpr(ctx->expr());
+        el->AddElement(std::move(m_Current));
+    }
+    else
+    {
+        el->SetName(ctx->Name()->toString());
+    }
+    m_Current = std::unique_ptr<ParamElement>(el);
+    return nullptr;
 }
+
 antlrcpp::Any antlrcpptest::TLangVisitor::visitCycleBody(antlrcpptest::TParser::CycleBodyContext* ctx)
 {
-    return TParserBaseVisitor::visitCycleBody(ctx);
+    return TParserBaseVisitor::visitCycleBody(ctx);//TODO later
 }
-antlrcpp::Any antlrcpptest::TLangVisitor::visitReturnState(TParser::ReturnStateContext* ctx) { return antlrcpp::Any(); }
+
+antlrcpp::Any antlrcpptest::TLangVisitor::visitReturnState(TParser::ReturnStateContext* ctx)
+{
+    auto el = new ReturnElement(m_Tree);
+    if (ctx->expr())
+    {
+        visitExpr(ctx->expr());
+        el->AddElement(std::move(m_Current));
+    }
+    m_Current = std::unique_ptr<ReturnElement>(el);
+    return nullptr;
+}
+
 antlrcpp::Any antlrcpptest::TLangVisitor::visitStop(antlrcpptest::TParser::StopContext* ctx)
 {
-    return TParserBaseVisitor::visitStop(ctx);
+    auto el = new StopElement(m_Tree);
+    if (!ctx->Break())
+    {
+        el->SetWord(ctx->Continue()->toString());
+    }
+    else
+    {
+        el->SetWord(ctx->Break()->toString());
+    }
+    m_Current = std::unique_ptr<StopElement>(el);
+    return nullptr;
 }
+
 antlrcpp::Any antlrcpptest::TLangVisitor::visitFloatValue(antlrcpptest::TParser::FloatValueContext* ctx)
 {
-    return TParserBaseVisitor::visitFloatValue(ctx);
+    auto el = new FloatValueElement(m_Tree);
+    el->SetNums(ctx->Floater()->toString());
+    m_Current = std::unique_ptr<FloatValueElement>(el);
+    return nullptr;
 }
+
 antlrcpp::Any antlrcpptest::TLangVisitor::visitBoolValue(antlrcpptest::TParser::BoolValueContext* ctx)
 {
-    return TParserBaseVisitor::visitBoolValue(ctx);
+    auto el = new BoolValueElement(m_Tree);
+    el->SetValue(ctx->toString());
+    m_Current = std::unique_ptr<BoolValueElement>(el);
+    return nullptr;
 }
+
 antlrcpp::Any antlrcpptest::TLangVisitor::visitSetValue(antlrcpptest::TParser::SetValueContext* ctx)
 {
-    return TParserBaseVisitor::visitSetValue(ctx);
+    auto el = new SetValueElement(m_Tree);
+    for (auto& elem : ctx->element())
+    {
+        visitElement(elem);
+        el->AddElement(std::move(m_Current));
+    }
+    m_Current = std::unique_ptr<SetValueElement>(el);
+    return nullptr;
 }
+
 antlrcpp::Any antlrcpptest::TLangVisitor::visitElement(antlrcpptest::TParser::ElementContext* ctx)
 {
-    return TParserBaseVisitor::visitElement(ctx);
+    auto el = new ElementElement(m_Tree);
+    if (ctx->INT())
+    {
+        el->SetValue(ctx->INT()->toString());
+    }
+    else if (ctx->floatValue())
+    {
+        visitFloatValue(ctx->floatValue());
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->String())
+    {
+        el->SetValue(ctx->String()->toString());
+    }
+    else if (ctx->boolValue())
+    {
+        visitBoolValue(ctx->boolValue());
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->Name())
+    {
+        el->SetName(ctx->Name()->toString());
+    }
+    m_Current = std::unique_ptr<ElementElement>(el);
+    return nullptr;
 }
-antlrcpp::Any antlrcpptest::TLangVisitor::visitExpr(TParser::ExprContext* ctx) { return TParserBaseVisitor::visitExpr(ctx); }
-antlrcpp::Any antlrcpptest::TLangVisitor::visitCast(TParser::CastContext* ctx) { return TParserBaseVisitor::visitCast(ctx); }
+
+antlrcpp::Any antlrcpptest::TLangVisitor::visitExpr(TParser::ExprContext* ctx)
+{
+    auto el = new ExprElement(m_Tree);
+    if (ctx->Star())
+    {
+        el->SetSignIfHave(ctx->Star()->toString());
+        visitExpr(ctx->expr(0));
+        el->AddElement(std::move(m_Current));
+        visitExpr(ctx->expr(1));
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->Minus())
+    {
+        el->SetSignIfHave(ctx->Minus()->toString());
+        visitExpr(ctx->expr(0));
+        el->AddElement(std::move(m_Current));
+        visitExpr(ctx->expr(1));
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->Plus())
+    {
+        el->SetSignIfHave(ctx->Plus()->toString());
+        visitExpr(ctx->expr(0));
+        el->AddElement(std::move(m_Current));
+        visitExpr(ctx->expr(1));
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->expr(0))
+    {
+        visitExpr(ctx->expr(0));
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->cast())
+    {
+        visitCast(ctx->cast());
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->floatValue())
+    {
+        visitFloatValue(ctx->floatValue());
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->boolValue())
+    {
+        visitBoolValue(ctx->boolValue());
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->setValue())
+    {
+        visitSetValue(ctx->setValue());
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->functionCall())
+    {
+        visitFunctionCall(ctx->functionCall());
+        el->AddElement(std::move(m_Current));
+    }
+    else if (ctx->INT())
+    {
+        el->SetIntIfHave(ctx->INT()->toString());
+    }
+    else if (ctx->Name())
+    {
+        el->SetNameIfHave(ctx->Name()->toString());
+    }
+    else if (ctx->String())
+    {
+        el->SetValueIfHave(ctx->String()->toString());
+    }
+    m_Current = std::unique_ptr<ExprElement>(el);
+    return nullptr;
+}
+
+antlrcpp::Any antlrcpptest::TLangVisitor::visitCast(TParser::CastContext* ctx)
+{
+    auto el = new CastElement(m_Tree);
+    visitType(ctx->type());
+    el->AddElement(std::move(m_Current));
+    visitExpr(ctx->expr());
+    el->AddElement(std::move(m_Current));
+    m_Current = std::unique_ptr<CastElement>(el);
+    return nullptr;
+}

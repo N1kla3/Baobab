@@ -7,13 +7,21 @@
 
 std::string NamespaceBody::GetText()
 {
-    std::string res = "{";
-    m_Owner.lock()->OpenBody(true);
-    for (auto& child : m_Children)
+    try
     {
-        res += child->GetText();
+        std::string res = "{";
+        m_Owner.lock()->OpenBody(true);
+        for (auto& child : m_Children)
+        {
+            res += child->GetText();
+        }
+        m_Owner.lock()->OpenBody(false);
+        res += "}";
+        return res;
     }
-    m_Owner.lock()->OpenBody(false);
-    res += "}";
-    return res;
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }

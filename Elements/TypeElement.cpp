@@ -10,10 +10,18 @@ TypeElement::TypeElement(const std::shared_ptr<Baobab>& owner, const std::string
 
 std::string TypeElement::GetText()
 {
-    auto result = m_TypeName;
-    if      (m_TypeName == "string") result = "std::string";
-    else if (m_TypeName == "element") result = "std::variant<int, float, std::string, bool>";
-    else if (m_TypeName == "set") result = "std::vector<std::variant<int, float, std::string, bool>";
-    m_Type = result;
-    return result;
+    try
+    {
+        auto result = m_TypeName;
+        if      (m_TypeName == "string") result = "std::string";
+        else if (m_TypeName == "element") result = "std::variant<int, float, std::string, bool>";
+        else if (m_TypeName == "set") result = "std::vector<std::variant<int, float, std::string, bool>";
+        m_Type = result;
+        return result;
+    }
+    catch (const char* message)
+    {
+        std::cout << message;
+        std::terminate();
+    }
 }
