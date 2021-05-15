@@ -11,9 +11,9 @@ class ConditionElement : public Element
 public:
     ConditionElement(const std::shared_ptr<Baobab>& owner);
     virtual std::string GetText()  override;
+    void SetSign(bool flag);
 
-    std::string name_to_check{};
-    std::string num;
-    std::string negative;
+private:
+    bool m_Sign;
 };
 

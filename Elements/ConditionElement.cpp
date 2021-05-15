@@ -7,34 +7,51 @@
 
 std::string ConditionElement::GetText()
 {
-    if (!num.empty()) return num;
-    if (name_to_check.empty())
-    {//TODO REFORGE IT
-        std::string res = "(";
-        for (auto& child : m_Children)
-        {
-            res += " " + child->GetText() + " ";
-        }
-        return res + ")";
-    }
-    else
+    std::string res = "";
+    try
     {
-        if (m_Owner.lock()->CheckVariableForType(name_to_check, "bool"))
+        if (m_Children.size() == 1)
         {
-            std::string res = "(";
-            if (!negative.empty())
+            res += m_Children[0]->GetText();
+            if (m_Children[0]->GetType() != "bool")
             {
-                res += "!";
+                throw "Condition should be bool";
             }
-            res += name_to_check;
-            return res + ")";
         }
-        throw std::exception();
+        else if (m_Children.size() == 3)
+        {
+            res += m_Children[0]->GetText()
+                   + m_Children[1]->GetText()
+                   + m_Children[2]->GetText();
+            auto first_type = m_Children[0]->GetType();
+            auto second_type = m_Children[2]->GetType();
+            if (m_Sign)
+            {
+                if (first_type == "int" || first_type == "bool") return res;
+                else throw "Condition cant be" + first_type;
+            }
+            else
+            {
+                if (first_type == "float" || first_type == "int") return res;
+                else throw "Condition cant be" + first_type;
+            }
+        }
     }
+    catch (const char* message)
+    {
+        std::cerr << message << std::endl;
+        std::terminate();
+    }
+    return res;
 }
 
 ConditionElement::ConditionElement(const std::shared_ptr<Baobab>& owner)
     : Element(owner)
 {
     m_Type = "bool";
+}
+
+void ConditionElement::SetSign(bool flag)
+{
+    m_Sign = flag;
 }

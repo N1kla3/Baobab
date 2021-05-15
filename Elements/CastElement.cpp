@@ -32,7 +32,7 @@ std::string CastElement::GetText()
     }
     catch (const char* message)
     {
-        std::cout << message;
+        std::cerr << message;
         std::terminate();
     }
 }

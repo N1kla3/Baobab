@@ -30,25 +30,24 @@
 antlrcpp::Any antlrcpptest::TLangVisitor::visitMain(antlrcpptest::TParser::MainContext* ctx)
 {
     //m_Tree.SetupRoot(std::make_unique<MainElement>());
-    MainElement el(m_Tree);
-    for (auto statement : ctx->statement())
+    try
     {
-        try
+        MainElement el(m_Tree);
+        for (auto statement : ctx->statement())
         {
+
             visitStatement(statement);
             el.AddElement(std::move(m_Current));
         }
-        catch (std::exception e)
-        {
-            std::cout << "CATCH";
-            return nullptr;
-            //TODO handling
-        }
+        std::string text = el.GetText();
+        std::ofstream stream_res("res.txt");
+        stream_res << text;
+        stream_res.close();
+    } catch (const char* message)
+    {
+        std::cerr << message;
+        std::terminate();
     }
-    std::string text = el.GetText();
-    std::ofstream stream_res("res.txt");
-    stream_res << text;
-    stream_res.close();
     return nullptr;
 }
 antlrcpp::Any antlrcpptest::TLangVisitor::visitStatement(antlrcpptest::TParser::StatementContext* ctx)
@@ -82,10 +81,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitFunction(antlrcpptest::TParser::F
     visitBody(ctx->body());
     el->AddElement(std::move(m_Current));
     std::vector<std::string> names;
-    for (auto name : ctx->Name())
-    {
-        names.push_back(name->toString());
-    }
+    for (auto name : ctx->Name()) { names.push_back(name->toString()); }
     el->SetNames(names);
     m_Current = std::unique_ptr<Element>(el);
     return nullptr;
@@ -199,11 +195,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitType(antlrcpptest::TParser::TypeC
 antlrcpp::Any antlrcpptest::TLangVisitor::visitCondition(antlrcpptest::TParser::ConditionContext* ctx)
 {
     auto el = new ConditionElement(m_Tree);
-    if (ctx->Name())el->name_to_check = ctx->Name()->toString();
-    if (ctx->Not())el->negative = ctx->Not()->toString();
-    if (ctx->INT())el->num = ctx->INT()->toString();
-    if (ctx->Name()
-          && ctx->INT())
+    if (ctx->boolBinaryOperators())
     {
         visitCondition(ctx->condition(0));
         el->AddElement(std::move(m_Current));
@@ -212,10 +204,25 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitCondition(antlrcpptest::TParser::
         visitCondition(ctx->condition(1));
         el->AddElement(std::move(m_Current));
     }
+    else if (ctx->numericalBoolOperators())
+    {
+        visitCondition(ctx->condition(0));
+        el->AddElement(std::move(m_Current));
+        visitNumericalBoolOperators(ctx->numericalBoolOperators());
+        el->AddElement(std::move(m_Current));
+        visitCondition(ctx->condition(1));
+        el->AddElement(std::move(m_Current));
+    }
+    else
+    {
+        visitExpr(ctx->expr());
+        el->AddElement(std::move(m_Current));
+    }
     m_Current = std::unique_ptr<ConditionElement>(el);
     return nullptr;
 }
-antlrcpp::Any antlrcpptest::TLangVisitor::visitBoolBinaryOperators(antlrcpptest::TParser::BoolBinaryOperatorsContext* ctx)
+antlrcpp::Any
+antlrcpptest::TLangVisitor::visitBoolBinaryOperators(antlrcpptest::TParser::BoolBinaryOperatorsContext* ctx)
 {
     auto el = new BoolBinaryElement(m_Tree);
     el->str = ctx->toString();
@@ -258,10 +265,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitReturnState(TParser::ReturnStateC
 antlrcpp::Any antlrcpptest::TLangVisitor::visitStop(antlrcpptest::TParser::StopContext* ctx)
 {
     auto el = new StopElement(m_Tree);
-    if (!ctx->Break())
-    {
-        el->SetWord(ctx->Continue()->toString());
-    }
+    if (!ctx->Break()) { el->SetWord(ctx->Continue()->toString()); }
     else
     {
         el->SetWord(ctx->Break()->toString());
@@ -301,10 +305,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitSetValue(antlrcpptest::TParser::S
 antlrcpp::Any antlrcpptest::TLangVisitor::visitElement(antlrcpptest::TParser::ElementContext* ctx)
 {
     auto el = new ElementElement(m_Tree);
-    if (ctx->INT())
-    {
-        el->SetValue(ctx->INT()->toString());
-    }
+    if (ctx->INT()) { el->SetValue(ctx->INT()->toString()); }
     else if (ctx->floatValue())
     {
         visitFloatValue(ctx->floatValue());

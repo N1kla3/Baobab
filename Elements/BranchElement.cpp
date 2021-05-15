@@ -25,7 +25,7 @@ std::string BranchElement::GetText()
     }
     catch (const char* message)
     {
-        std::cout << message;
+        std::cerr << message;
         std::terminate();
     }
 }

@@ -28,23 +28,44 @@ type: Int
 ;
 
 condition:
-    condition boolBinaryOperators condition
-    | (Not?
-    ( Name
-    | INT
-    | floatValue
-    | boolValue))
+      condition boolBinaryOperators condition
+      | condition numericalBoolOperators condition
+      | expr
 ;
 
 boolBinaryOperators:
+        And
+      | Or
+;
+
+numericalBoolOperators:
         LessThan
       | LessEqualThan
       | GreaterThan
       | GreaterEqualThan
       | Equality
-      | And
-      | Or
 ;
+///////DEAD
+//conditionValue:
+//    Not?
+//    ( INT
+//    | boolValue
+//    | Name)
+//;
+//
+//numericalCondition:
+//    numericalCondition numericalBoolOperators numericalCondition
+//    | numericalBoolValue
+//;
+//
+//
+//
+//numericalBoolValue:
+//      floatValue
+//    | INT
+//    | Name
+//;
+////////// DEAD
 
 function:
     Function Name OpenPar ((type Name) (Comma type Name)*)* ClosePar

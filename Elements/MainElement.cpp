@@ -23,10 +23,10 @@ std::string MainElement::GetText()
         m_Owner.lock()->OpenBody(false);
         result += " return 0;\n}";
         return result;
-    }
+    }//TODO watch catch agagin
     catch (const char* message)
     {
-        std::cout << message;
+        std::cerr << message << std::endl;
         std::terminate();
     }
 }

@@ -21,7 +21,7 @@ std::string NamespaceBody::GetText()
     }
     catch (const char* message)
     {
-        std::cout << message;
+        std::cerr << message << std::endl;
         std::terminate();
     }
 }

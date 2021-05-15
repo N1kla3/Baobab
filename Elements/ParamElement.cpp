@@ -26,8 +26,8 @@ std::string ParamElement::GetText()
     }
     catch (const char* message)
     {
-        std::cout << message;
-        std::terminate();
+        std::cerr << message << std::endl;
+        std::exit(0);
     }
 }
 
