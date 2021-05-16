@@ -6,22 +6,15 @@
 
 std::string SetValueElement::GetText()
 {
-    try
+    std::string res = "{";
+    bool comma = false;
+    for (auto& el : m_Children)
     {
-        std::string res = "{";
-        bool comma = false;
-        for (auto& el : m_Children)
-        {
-            if (comma) res += ",";
-            else comma = true;
-            res += el->GetText();
-        }
-        res += "}";
-        return res;
+        if (comma) res += ",";
+        else
+            comma = true;
+        res += el->GetText();
     }
-    catch (const char* message)
-    {
-        std::cerr << message << std::endl;
-        std::exit(0);
-    }
+    res += "}";
+    return res;
 }

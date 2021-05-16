@@ -28,9 +28,11 @@ public:
     void SetIsFunctionBodyNow(bool flag);
 
     bool AddVariable(const std::string& variableName, const std::string& variableType);
+    bool IsVariableExists(const std::string& name);
     bool CheckVariableForType(const std::string& name, const std::string& type);
     std::string GetVariableType(const std::string& name);
-    bool AddFunction(const std::string& functionName, const std::string& functionType, const std::vector<std::string>& functionParams);
+    bool AddFunction(const std::string& functionName, const std::string& functionType,
+                     const std::vector<std::string>& functionParams);
 
     std::string GetLastFunctionType() const;
     /**
@@ -49,4 +51,3 @@ private:
     std::string m_CurrentFunction;
     bool m_bIsHandlingFunction = false;
 };
-

@@ -8,8 +8,7 @@
 class StopElement : public Element
 {
 public:
-    StopElement(const std::shared_ptr<Baobab>& owner)
-        : Element(owner){}
+    StopElement(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
     virtual std::string GetText() override;
     void SetWord(const std::string& word);
 

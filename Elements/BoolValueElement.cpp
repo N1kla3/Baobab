@@ -7,10 +7,8 @@
 std::string BoolValueElement::GetText()
 {
     if (m_Value == "True") return "true";
-    else return "false";
+    else
+        return "false";
 }
 
-void BoolValueElement::SetValue(const std::string& value)
-{
-    m_Value = value;
-}
+void BoolValueElement::SetValue(const std::string& value) { m_Value = value; }

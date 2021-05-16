@@ -9,9 +9,7 @@
 class ConditionValueElement : public Element
 {
 public:
-    ConditionValueElement(const std::shared_ptr<Baobab>& owner)
-        : Element(owner)
-    {}
+    ConditionValueElement(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
 
     virtual std::string GetText() override;
 
@@ -24,4 +22,3 @@ private:
     std::string m_Int;
     bool m_bNot;
 };
-

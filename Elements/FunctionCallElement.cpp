@@ -7,46 +7,30 @@
 
 std::string FunctionCallElement::GetText()
 {
-    try
+    std::string res = "";
+    auto functionTraits = m_Owner.lock()->GetFunction(m_FunctionName);
+    if (functionTraits == m_Owner.lock()->empty_function) { throw "Function traits are incorrect"; }
+    else
     {
-        std::string res = "";
-        auto functionTraits = m_Owner.lock()->GetFunction(m_FunctionName);
-        if (functionTraits == m_Owner.lock()->empty_function)
+        m_Type = functionTraits.first;
+        res += m_FunctionName + "(";
+        bool comma = false;
+        for (auto& node : m_Children)
         {
-            throw "Function traits are incorrect";
+            if (comma) res += ",";
+            else
+                comma = true;
+            res += node->GetText();
         }
-        else
-        {
-            m_Type = functionTraits.first;
-            res += m_FunctionName + "(";
-            bool comma = false;
-            for (auto& node : m_Children)
-            {
-                if (comma) res += ",";
-                else comma = true;
-                res += node->GetText();
-            }
-            res += ")";
+        res += ")";
 
-            if (functionTraits.second.size() != m_Children.size()) throw "Incorrect arguments size";
-            for (int index = 0; index < m_Children.size(); index++)
-            {
-                if (m_Children[index]->GetType() != functionTraits.second[index])
-                {
-                    throw "Incorrect argument type";
-                }
-            }
+        if (functionTraits.second.size() != m_Children.size()) throw "Incorrect arguments size";
+        for (int index = 0; index < m_Children.size(); index++)
+        {
+            if (m_Children[index]->GetType() != functionTraits.second[index]) { throw "Incorrect argument type"; }
         }
-        return res;
     }
-    catch (const char* message)
-    {
-        std::cerr << message << std::endl;
-        std::terminate();
-    }
+    return res;
 }
 
-void FunctionCallElement::SetFunctionName(const std::string& name)
-{
-    m_FunctionName = name;
-}
+void FunctionCallElement::SetFunctionName(const std::string& name) { m_FunctionName = name; }

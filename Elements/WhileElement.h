@@ -8,6 +8,6 @@
 class WhileElement : public Element
 {
 public:
-    WhileElement(const std::shared_ptr<Baobab>& owner) : Element(owner){}
+    WhileElement(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
     virtual std::string GetText() override;
 };

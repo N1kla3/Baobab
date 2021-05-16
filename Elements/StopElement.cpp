@@ -5,12 +5,6 @@
 #include "StopElement.h"
 #include "Baobab.h"
 
-std::string StopElement::GetText()
-{
-     return m_Word + ";";
-}
+std::string StopElement::GetText() { return m_Word + ";"; }
 
-void StopElement::SetWord(const std::string& word)
-{
-    m_Word = word;
-}
+void StopElement::SetWord(const std::string& word) { m_Word = word; }

@@ -8,9 +8,9 @@
 class SetValueElement : public Element
 {
 public:
-    SetValueElement(const std::shared_ptr<Baobab>& owner)
-        : Element(owner)
-    {m_Type = "std::vector<std::variant<int, float, std::string, bool>>";}
+    SetValueElement(const std::shared_ptr<Baobab>& owner) : Element(owner)
+    {
+        m_Type = "std::vector<std::variant<int, float, std::string, bool>>";
+    }
     virtual std::string GetText() override;
 };
-

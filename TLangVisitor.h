@@ -48,6 +48,7 @@ namespace antlrcpptest
 
         virtual antlrcpp::Any visitExpr(TParser::ExprContext* ctx) override;
         virtual antlrcpp::Any visitCast(TParser::CastContext* ctx) override;
+        antlrcpp::Any visitNumericalBoolOperators(TParser::NumericalBoolOperatorsContext* ctx) override;
 
         inline void SetTree()
         {

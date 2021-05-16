@@ -8,10 +8,8 @@
 class ReturnElement : public Element
 {
 public:
-    ReturnElement(const std::shared_ptr<Baobab>& owner)
-        : Element(owner){}
+    ReturnElement(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
     virtual std::string GetText() override;
 
 private:
 };
-

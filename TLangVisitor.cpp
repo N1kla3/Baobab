@@ -17,6 +17,7 @@
 #include <Elements/FunctionCallElement.h>
 #include <Elements/FunctionElement.h>
 #include <Elements/NamespaceBody.h>
+#include <Elements/NumericalBoolOperators.h>
 #include <Elements/ParamElement.h>
 #include <Elements/ReturnElement.h>
 #include <Elements/SetValueElement.h>
@@ -46,7 +47,12 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitMain(antlrcpptest::TParser::MainC
     } catch (const char* message)
     {
         std::cerr << message;
-        std::terminate();
+        std::exit(0);
+    }
+    catch (std::string& message)
+    {
+        std::cerr << message;
+        std::exit(0);
     }
     return nullptr;
 }
@@ -188,7 +194,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitBody(antlrcpptest::TParser::BodyC
 
 antlrcpp::Any antlrcpptest::TLangVisitor::visitType(antlrcpptest::TParser::TypeContext* ctx)
 {
-    auto el = new TypeElement(m_Tree, ctx->toString());
+    auto el = new TypeElement(m_Tree, ctx->getText());
     m_Current = std::unique_ptr<TypeElement>(el);
     return nullptr;
 }
@@ -225,7 +231,7 @@ antlrcpp::Any
 antlrcpptest::TLangVisitor::visitBoolBinaryOperators(antlrcpptest::TParser::BoolBinaryOperatorsContext* ctx)
 {
     auto el = new BoolBinaryElement(m_Tree);
-    el->str = ctx->toString();
+    el->str = ctx->getText();
     m_Current = std::unique_ptr<BoolBinaryElement>(el);
     return nullptr;
 }
@@ -285,7 +291,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitFloatValue(antlrcpptest::TParser:
 antlrcpp::Any antlrcpptest::TLangVisitor::visitBoolValue(antlrcpptest::TParser::BoolValueContext* ctx)
 {
     auto el = new BoolValueElement(m_Tree);
-    el->SetValue(ctx->toString());
+    el->SetValue(ctx->getText());
     m_Current = std::unique_ptr<BoolValueElement>(el);
     return nullptr;
 }
@@ -409,5 +415,12 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitCast(TParser::CastContext* ctx)
     visitExpr(ctx->expr());
     el->AddElement(std::move(m_Current));
     m_Current = std::unique_ptr<CastElement>(el);
+    return nullptr;
+}
+antlrcpp::Any antlrcpptest::TLangVisitor::visitNumericalBoolOperators(antlrcpptest::TParser::NumericalBoolOperatorsContext* ctx)
+{
+    auto el = new NumericalBoolOperators(m_Tree);
+    el->SetOp(ctx->getText());
+    m_Current = std::unique_ptr<NumericalBoolOperators>(el);
     return nullptr;
 }

@@ -8,7 +8,7 @@
 class ForElement : public Element
 {
 public:
-    ForElement(const std::shared_ptr<Baobab>& owner) : Element(owner){}
+    ForElement(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
     virtual std::string GetText() override;
     void SetName(const std::string& name);
 

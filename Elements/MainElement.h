@@ -10,7 +10,5 @@ class MainElement : public Element
 {
 public:
     MainElement(const std::shared_ptr<Baobab>& owner) : Element(owner){};
-    [[nodiscard]] virtual std::string GetText()  override;
-
+    [[nodiscard]] virtual std::string GetText() override;
 };
-

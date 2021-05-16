@@ -9,16 +9,13 @@
 class CastElement : public Element
 {
 public:
-    CastElement(const std::shared_ptr<Baobab>& owner) : Element(owner){}
+    CastElement(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
     virtual std::string GetText() override;
 
 private:
-
-    inline static const std::unordered_map<std::string, std::vector<std::string>> CAST_MAP
-    {
-        {"bool",    {"int", "float"}},
-        {"float",   {"int", "bool"}},
-        {"int",     {"bool", "float"}},
+    inline static const std::unordered_map<std::string, std::vector<std::string>> CAST_MAP{
+            {"bool", {"int", "float"}},
+            {"float", {"int", "bool"}},
+            {"int", {"bool", "float"}},
     };
 };
-

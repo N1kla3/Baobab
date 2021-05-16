@@ -8,11 +8,8 @@
 class CycleBody : public Element
 {
 public:
-    CycleBody(const std::shared_ptr<Baobab>& owner)
-        : Element(owner)
-    {}
+    CycleBody(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
     virtual std::string GetText() override;
+
 private:
 };
-
-

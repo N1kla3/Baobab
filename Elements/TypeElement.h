@@ -10,9 +10,8 @@ class TypeElement : public Element
 {
 public:
     TypeElement(const std::shared_ptr<Baobab>& owner, const std::string& typeName);
-    [[nodiscard]]virtual std::string GetText()  override;
+    [[nodiscard]] virtual std::string GetText() override;
 
 private:
     std::string m_TypeName;
 };
-

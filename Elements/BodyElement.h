@@ -8,10 +8,8 @@
 class BodyElement : public Element
 {
 public:
-    BodyElement(const std::shared_ptr<Baobab>& owner)
-        : Element(owner){}
+    BodyElement(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
     virtual std::string GetText() override;
 
 private:
 };
-

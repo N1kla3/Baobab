@@ -8,10 +8,8 @@
 class BranchElement : public Element
 {
 public:
-    BranchElement(const std::shared_ptr<Baobab>& owner) : Element(owner){}
+    BranchElement(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
     virtual std::string GetText() override;
 
 private:
-
 };
-

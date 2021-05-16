@@ -4,12 +4,6 @@
 
 #include "NumericalBoolOperators.h"
 
-std::string NumericalBoolOperators::GetText()
-{
-    return m_Op;
-}
+std::string NumericalBoolOperators::GetText() { return m_Op; }
 
-void NumericalBoolOperators::SetOp(const std::string& op)
-{
-    m_Op = op;
-}
+void NumericalBoolOperators::SetOp(const std::string& op) { m_Op = op; }

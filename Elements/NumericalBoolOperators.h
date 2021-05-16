@@ -8,13 +8,10 @@
 class NumericalBoolOperators : public Element
 {
 public:
-    NumericalBoolOperators(const std::shared_ptr<Baobab>& owner)
-        : Element(owner)
-    {}
+    NumericalBoolOperators(const std::shared_ptr<Baobab>& owner) : Element(owner) {}
     virtual std::string GetText() override;
-    inline void SetOp(const std::string& op);
+    void SetOp(const std::string& op);
 
 private:
     std::string m_Op;
 };
-

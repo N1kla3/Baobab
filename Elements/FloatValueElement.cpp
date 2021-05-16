@@ -4,12 +4,6 @@
 
 #include "FloatValueElement.h"
 
-std::string FloatValueElement::GetText()
-{
-    return m_First;
-}
+std::string FloatValueElement::GetText() { return m_First; }
 
-void FloatValueElement::SetNums(const std::string& first)
-{
-    m_First = first;
-}
+void FloatValueElement::SetNums(const std::string& first) { m_First = first; }

@@ -10,10 +10,9 @@ class ConditionElement : public Element
 {
 public:
     ConditionElement(const std::shared_ptr<Baobab>& owner);
-    virtual std::string GetText()  override;
+    virtual std::string GetText() override;
     void SetSign(bool flag);
 
 private:
     bool m_Sign;
 };
-
