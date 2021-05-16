@@ -45,7 +45,8 @@ public:
 private:
     std::shared_ptr<Element> m_Root;
 
-    std::unordered_map<std::string, std::pair<std::string, std::vector<std::string>>> m_Functions{};
+    std::unordered_map<std::string, std::pair<std::string, std::vector<std::string>>> m_Functions{
+    };
     var_stack m_Variables{};
 
     std::string m_CurrentFunction;

@@ -12,6 +12,8 @@ public:
     [[nodiscard]] virtual std::string GetText() override;
     void SetNames(const std::vector<std::string>& names);
 
+    void WriteToFile(const std::string& file, const std::string& value);
+
 private:
     std::vector<std::string> m_Names{};
 };

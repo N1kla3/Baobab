@@ -8,6 +8,27 @@
 std::string FunctionCallElement::GetText()
 {
     std::string res = "";
+    if (m_FunctionName == "print")
+    {
+        m_Type = "void";
+        if (m_Children.size() == 1)
+        {
+            auto arg = m_Children[0]->GetText();
+            auto type = m_Children[0]->GetType();
+            if (type == "std::vector<std::variant<int, float, std::string, bool>>"
+                || type == "std::variant<int, float, std::string, bool>")
+            {
+                throw "Cant print Element";
+            }
+            res += "std::cout << " + arg;
+            return res;
+        }
+        else throw "Print have one argument";
+    }
+    else if (m_FunctionName == "at")
+    {
+
+    }
     auto functionTraits = m_Owner.lock()->GetFunction(m_FunctionName);
     if (functionTraits == m_Owner.lock()->empty_function) { throw "Function traits are incorrect"; }
     else

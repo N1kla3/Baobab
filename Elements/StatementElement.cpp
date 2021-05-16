@@ -15,6 +15,7 @@ std::string StatementElement::GetText()
             auto res = m_Name + "=" + m_Children[0]->GetText() + ";";
             if (m_Owner.lock()->GetVariableType(m_Name) != m_Children[0]->GetType())
                 throw "Defined variable not the same type with value";
+            return res;
         }
         else
             throw "Variable " + m_Name + " doesnt exists";

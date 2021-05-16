@@ -22,6 +22,10 @@ int main(int argc, const char** argv)
         in += temp;
     }
     stream.close();
+    std::ofstream h("functions.h");
+    h << "#include <iostream>\n"; h.close();
+    std::ofstream cpp("functions.cpp");
+    cpp << "#include \"functions.h\"\n"; cpp.close();
     ANTLRInputStream input(in);
     TLexer lexer(&input);
     CommonTokenStream tokens(&lexer);
@@ -31,5 +35,6 @@ int main(int argc, const char** argv)
     TLangVisitor visitor;
     visitor.SetTree();
     visitor.visitMain(tree);
+    system("g++ res.cpp functions.h functions.cpp -std=c++20  -o program");
     return 0;
 }

@@ -114,14 +114,22 @@ namespaceBody:
 
 body:
     BodyStart
-    (statement | returnState)*
+    bodyPart*
     BodyEnd
+;
+
+bodyPart:
+    statement | returnState
 ;
 
 cycleBody:
     BodyStart
-    (statement | returnState | stop)*
+    cycleBodyPart*
     BodyEnd
+;
+
+cycleBodyPart:
+    statement | returnState | stop
 ;
 
 returnState:

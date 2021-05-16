@@ -10,9 +10,11 @@ std::string MainElement::GetText()
     std::string result{};
     result += "\n#include <iostream>";
     result += "\n#include <variant>";
+    result += "\n#include <vector>";
     result += "\n#include <set>";
     result += "\n#include <string>";
-    result += "int main(){\n";
+    result += "\n#include \"functions.h\"";
+    result += "\nint main(){\n";
     m_Owner.lock()->OpenBody(true);
     for (auto& element_ptr : m_Children) { result += element_ptr->GetText(); }
     m_Owner.lock()->OpenBody(false);

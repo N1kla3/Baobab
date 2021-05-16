@@ -4,6 +4,7 @@
 
 #include "FunctionElement.h"
 #include "Baobab.h"
+#include <fstream>
 
 std::string FunctionElement::GetText()
 {
@@ -33,10 +34,23 @@ std::string FunctionElement::GetText()
         else
             throw "Cant add variable with name" + name;
     }
-    res += ")";//TODO declaration here
+    res += ")";
+    WriteToFile("functions.h", res + ";\n");
     res += m_Children[children_size - 1]->GetText();
     m_Owner.lock()->OpenFunctionBody(false);
-    return res;
+    WriteToFile("functions.cpp", res);
+    return "";
 }
 
 void FunctionElement::SetNames(const std::vector<std::string>& names) { m_Names = names; }
+
+void FunctionElement::WriteToFile(const std::string& file, const std::string& value)
+{
+    std::ofstream stream(file, std::ios::app);
+    if (stream.is_open())
+    {
+        stream << value;
+    }
+    stream.close();
+}
+

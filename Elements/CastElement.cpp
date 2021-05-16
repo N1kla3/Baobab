@@ -19,12 +19,12 @@ std::string CastElement::GetText()
             {
                 std::string res = "(";
                 res += m_Type;
-                res += ")(";//TODO strange thing
-                res += second_type + ")";//TODO type not corrrect
+                res += ")(";
+                res += m_Children[1]->GetText() + ")";
                 return res;
             }
         }
-        throw "Impossible cast from";
+        throw "Impossible cast from " + second_type;
     }
-    throw "Impossible cast to";
+    throw "Impossible cast to " + m_Type;
 }

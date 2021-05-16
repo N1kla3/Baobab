@@ -5,11 +5,14 @@
 #include "TLangVisitor.h"
 #include "Elements/MainElement.h"
 #include <Elements/BodyElement.h>
+#include <Elements/BodyPartElement.h>
 #include <Elements/BoolBinaryElement.h>
 #include <Elements/BoolValueElement.h>
 #include <Elements/BranchElement.h>
 #include <Elements/CastElement.h>
 #include <Elements/ConditionElement.h>
+#include <Elements/CycleBody.h>
+#include <Elements/CycleBodyPart.h>
 #include <Elements/ElementElement.h>
 #include <Elements/ExprElement.h>
 #include <Elements/FloatValueElement.h>
@@ -41,7 +44,7 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitMain(antlrcpptest::TParser::MainC
             el.AddElement(std::move(m_Current));
         }
         std::string text = el.GetText();
-        std::ofstream stream_res("res.txt");
+        std::ofstream stream_res("res.cpp");
         stream_res << text;
         stream_res.close();
     } catch (const char* message)
@@ -183,9 +186,9 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitWhileCycle(antlrcpptest::TParser:
 antlrcpp::Any antlrcpptest::TLangVisitor::visitBody(antlrcpptest::TParser::BodyContext* ctx)
 {
     auto el = new BodyElement(m_Tree);
-    for (auto state : ctx->statement())
+    for (auto state : ctx->bodyPart())
     {
-        visitStatement(state);//TODO fix order..
+        visitBodyPart(state);
         el->AddElement(std::move(m_Current));
     }
     m_Current = std::unique_ptr<BodyElement>(el);
@@ -253,7 +256,14 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitParam(antlrcpptest::TParser::Para
 
 antlrcpp::Any antlrcpptest::TLangVisitor::visitCycleBody(antlrcpptest::TParser::CycleBodyContext* ctx)
 {
-    return TParserBaseVisitor::visitCycleBody(ctx);//TODO later
+    auto el = new CycleBody(m_Tree);
+    for (auto state : ctx->cycleBodyPart())
+    {
+        visitCycleBodyPart(state);
+        el->AddElement(std::move(m_Current));
+    }
+    m_Current = std::unique_ptr<CycleBody>(el);
+    return nullptr;
 }
 
 antlrcpp::Any antlrcpptest::TLangVisitor::visitReturnState(TParser::ReturnStateContext* ctx)
@@ -422,5 +432,24 @@ antlrcpp::Any antlrcpptest::TLangVisitor::visitNumericalBoolOperators(antlrcppte
     auto el = new NumericalBoolOperators(m_Tree);
     el->SetOp(ctx->getText());
     m_Current = std::unique_ptr<NumericalBoolOperators>(el);
+    return nullptr;
+}
+antlrcpp::Any antlrcpptest::TLangVisitor::visitBodyPart(antlrcpptest::TParser::BodyPartContext* ctx)
+{
+    auto el = new BodyPartElement(m_Tree);
+    if (ctx->statement()) visitStatement(ctx->statement());
+    else if (ctx->returnState()) visitReturnState(ctx->returnState());
+    el->AddElement(std::move(m_Current));
+    m_Current = std::unique_ptr<BodyPartElement>(el);
+    return nullptr;
+}
+antlrcpp::Any antlrcpptest::TLangVisitor::visitCycleBodyPart(antlrcpptest::TParser::CycleBodyPartContext* ctx)
+{
+    auto el = new CycleBodyPart(m_Tree);
+    if (ctx->statement()) visitStatement(ctx->statement());
+    else if (ctx->returnState()) visitReturnState(ctx->returnState());
+    else if (ctx->stop()) visitStop(ctx->stop());
+    el->AddElement(std::move(m_Current));
+    m_Current = std::unique_ptr<CycleBodyPart>(el);
     return nullptr;
 }
