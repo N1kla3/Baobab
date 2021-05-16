@@ -27,7 +27,25 @@ std::string FunctionCallElement::GetText()
     }
     else if (m_FunctionName == "at")
     {
-
+        if (m_Children.size() == 3)
+        {
+            auto one = m_Children[0]->GetText();
+            auto oneT = m_Children[0]->GetType();
+            if (oneT != "std::vector<std::variant<int, float, std::string, bool>>")
+            {
+                throw "First should be set";
+            }
+            auto two = m_Children[1]->GetText();
+            auto twoT = m_Children[1]->GetType();
+            if (twoT != "int") throw "Index should be int";
+            auto three = m_Children[2]->GetText();
+            auto threeT = m_Children[2]->GetType();
+            if (threeT != "std::string") throw "Type should be in string";
+            m_Type = std::string(three.cbegin() + 1, three.cend() -1);
+            std::string rres = "std::get<" + m_Type + ">(" + one + "[" + two + "])";
+            return rres;
+        }
+        else throw "Incorrect args for at(set, index, retrieve type) function";
     }
     auto functionTraits = m_Owner.lock()->GetFunction(m_FunctionName);
     if (functionTraits == m_Owner.lock()->empty_function) { throw "Function traits are incorrect"; }

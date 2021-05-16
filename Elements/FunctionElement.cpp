@@ -9,7 +9,6 @@
 std::string FunctionElement::GetText()
 {
     if (m_Owner.lock()->GetIsFunctionBodyNow()) { throw "Cant create function in function"; }
-    //TODO separate write to h and cpp
     std::string res = "";
     if (!m_Owner.lock()->OpenFunctionBody(true)) throw "Cant create function in function";
     auto param_size = m_Names.size() - 1;

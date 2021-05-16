@@ -15,6 +15,5 @@ std::string WhileElement::GetText()
     m_Owner.lock()->OpenBody(false);
     return result;
 }
-//TODO (!!!) file writing
 //TODO (!!!) print at other functions
 //TODO (!!!) documentation

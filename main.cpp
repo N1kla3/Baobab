@@ -23,6 +23,8 @@ int main(int argc, const char** argv)
     }
     stream.close();
     std::ofstream h("functions.h");
+    h << "#include <vector>\n";
+    h << "#include <variant>\n";
     h << "#include <iostream>\n"; h.close();
     std::ofstream cpp("functions.cpp");
     cpp << "#include \"functions.h\"\n"; cpp.close();
