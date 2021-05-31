@@ -1,0 +1,46 @@
+start;
+define float asd = 3.3f;
+define set mySet = {3.5f, "stri", 33};
+func function(int f, string d)>>string
+[
+    f = f + 3;
+    return d;
+];
+
+func factorial(int num)>> int
+[
+    return num * num;
+];
+
+function(3, "eap");
+
+while (asd > 5.4f)
+[
+    function(1, "ss");
+    asd = asd + 2.0f;
+];
+
+define int x = 2;
+
+for (define int i = 2; i < 11; i = i + 1)
+[
+    x = factorial(x);
+    print("num - ");
+    print((bool)(x));
+    print("\n");
+];
+
+define set one = {2, 3, 4, 5, 6};
+
+func SumIntSet(set s, int size)>>void
+[
+    define int result = 1;
+    for (define int i = 0; i < size; i = i + 1)
+    [
+        result = result + at(s, i, "int");
+    ];
+    print("result - ");
+    print(result);
+];
+
+SumIntSet(one, 5);
